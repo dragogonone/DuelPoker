@@ -10,13 +10,26 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
     	if(this.isSelected==0){
+            addCardTrush(this.player,this.cards[0]);//test
     		this.y-=10;
     		this.isSelected = 1;
     		selecting_arr[this.posi2] = 1;
+
     	}else{
     		this.y+=10;
     		this.isSelected = 0;
     		selecting_arr[this.posi2]  = 0;
     	}
-  	}
+    },
+    getPower: function(){//パワーを返す
+        var x = 0;
+        for(i=0;i<this.cards.length;i++){
+            if(this.cards[i] == 1){
+                x += 20;
+            }else{
+                x += this.cards[i];
+            }
+        }
+        return x;
+    }
 });

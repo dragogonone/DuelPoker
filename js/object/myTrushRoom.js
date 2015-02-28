@@ -12,7 +12,7 @@ var MyHandRoomLabel = enchant.Class.create(enchant.Label, {
 	initialize: function(){
         enchant.Label.call(this);
 		this.backgroundColor = "yellow";
-		this.width = SCENE_WID - 200;
+		this.width = CARD_WID + 20;
 		this.height = CARD_HGT + 20;
     }
 });

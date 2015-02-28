@@ -1,18 +1,22 @@
 //自分の手札置き場のグループと色をつけるためのラベル
 
-var MyHandRoomGroup = enchant.Class.create(enchant.Group, {
+var MyTrapRoomGroup = enchant.Class.create(enchant.Group, {
     initialize: function(){
         enchant.Group.call(this);
-		this.x = 20;
-		this.y = SCENE_HGT - CARD_HGT - 30;
+		this.x = ROOM_WID_1 + 35;
+		this.y = SCENE_HGT - CARD_HGT - 30 - ROOM_HGT_1;
+        this.name = "myTrapRoom"
     }
 });
 
-var MyHandRoomLabel = enchant.Class.create(enchant.Label, {
+var MyTrapRoomLabel = enchant.Class.create(enchant.Label, {
 	initialize: function(){
         enchant.Label.call(this);
-		this.backgroundColor = "yellow";
-		this.width = SCENE_WID - 200;
+		this.backgroundColor = "purple";
+		this.width = CARD_WID + 20;
 		this.height = CARD_HGT + 20;
+        this.text = "trush";
+        this.font = "14px cursive";
+        this.color = "gray";
     }
 });
