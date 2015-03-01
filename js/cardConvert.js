@@ -47,7 +47,7 @@ function getCardFrame(num){
 	pair = codeToNum(num);
 	if (num == 53) { return 52; }//ジョーカー
 	if (num == 55) { return 54; }//裏面
-	
+
 	if(pair[0] < 8) //左側
 	{
 		ret = (pair[0]-1) * 8 + pair[1];

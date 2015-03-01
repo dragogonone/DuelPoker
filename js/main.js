@@ -9,7 +9,9 @@ var TRUMP_IMG = "img/trump.gif"		// トランプの画像
 var ROOM_WID_1 = SCENE_WID - 200;				//メインのカード置き場の横幅
 var ROOM_HGT_1 = CARD_HGT + 20;				//メインのカード置き場の縦幅
 
-var selecting_arr = [];		 //選択中のカード入れ 1:選択中 2:非選択中
+var selecting_arr = [];		 //選択中のカード入れ 1:選択中 0:非選択中
+var selecting_posi = 0;      //選択中のカードの所属ルーム　1:手札 2:フィールド
+
 var whichTurn = 0;            //現在どちらの手番か
 
 window.onload = function () {
