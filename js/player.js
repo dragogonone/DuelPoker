@@ -19,6 +19,9 @@ Player.prototype.initCards = function(){
 		this.hand[i] = card;
 		if(this.player==1){
 			myHandRoom.addCard(card);
+		}else if(this.player==2){
+			var c = eneHandRoom.addCard(card);
+			c.reverse();
 		}
 	}
 }
@@ -51,12 +54,9 @@ Player.prototype.summon = function(cards) {
 	this.field.push(creature);
 
 	if(this.player==1){
-		myFieldRoom.addCard(creature);//フィールドにカードを追加する
+		myFieldRoom.addGroup(creature);//フィールドにカードを追加する
 	}
 
-	myHandRoom.leftenCards();
-
-	for(var i=0;i<7;i++){//選択中のカード配列を空に
-		selecting_arr[i] = 0;
-	}
+	myHandRoom.leftenCards();//カードを詰める
+	selecting_arr = initArray(7);
 }

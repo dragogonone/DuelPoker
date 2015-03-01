@@ -1,17 +1,25 @@
 //自分の手札置き場のグループと色をつけるためのラベル
 
-var MyHandRoomGroup = enchant.Class.create(enchant.Group, {
-    initialize: function(){
+var HandRoomGroup = enchant.Class.create(enchant.Group, {
+    initialize: function(_player){
         enchant.Group.call(this);
-		this.x = 20;
-		this.y = SCENE_HGT - CARD_HGT - 20;
-        this.name = "myHandRoom"
+        this.player = _player;
+        if(_player.player==1){
+		    this.x = 20;
+		    this.y = SCENE_HGT - ROOM_HGT_1;
+            this.name = "myHandRoom";
+        }else if(_player.player==2){
+            this.x = SCENE_WID - ROOM_WID_1 - 20;
+            this.y = 0;
+            this.name = "eneHandRoom";
+        }
     },
     addCard: function(card){//手札にカードを一枚追加 //引数は数字コード
-        var x =  player1.hand.length - 1;
+        var x =  this.player.hand.length - 1;
         var sp = new CardSprite(card,x);
         sp.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
         this.addChild(sp);
+        return sp;
     },
     deleteCard: function(num){//引数は何番目にあるか、つまりposi2
         var x = 0;
@@ -22,21 +30,28 @@ var MyHandRoomGroup = enchant.Class.create(enchant.Group, {
             }
         }
     },
-    leftenCards: function(){//カードを左に寄せる
-        console.log(player1.hand);
+    leftenCards: function(){//カードを左下に寄せる
+        console.log(this.player.hand);
         console.log(this.childNodes.length);
         for(var i=1;i<this.childNodes.length;i++){
             console.log(this.childNodes[i].posi2);
             this.childNodes[i].posi2 = i-1;
             this.childNodes[i].moveTo((i-1)*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
         }
+    },
+    deselect: function(){//カードの選択を解除
+        for(var i=1;i<=this.player.hand.length;i++){
+            this.childNodes[i].moveTo((i-1)*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
+        }
+        selecting_posi = 0;
+        selecting_arr = initArray(7);
     }
 });
 
-var MyHandRoomLabel = enchant.Class.create(enchant.Label, {
-	initialize: function(){
+var HandRoomLabel = enchant.Class.create(enchant.Label, {
+	initialize: function(_name){
         enchant.Label.call(this);
-        this.name = "myHandRoomLabel"
+        this.name = _name
 		this.backgroundColor = "yellow";
 		this.width = ROOM_WID_1;
 		this.height = ROOM_HGT_1

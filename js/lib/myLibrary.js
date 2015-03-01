@@ -13,7 +13,7 @@ function deleteArrZero(arr){
 			z++;
 		}
 	}
-	
+
 	for(i=0;i<(y-z);i++){
 		while(arr[x]==0){ x++;}
 		arr[i] = arr[x];
@@ -50,5 +50,11 @@ function makeArrNotZero(arr){
 	return ret;
 }
 
-
-
+//配列を引数の個数の0で初期化する関数
+function initArray(num){
+	var arr = [];
+	for(var i=0;i<num;i++){
+		arr[i] = 0;
+	}
+	return arr;
+}
