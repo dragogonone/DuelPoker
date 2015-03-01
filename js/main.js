@@ -29,7 +29,7 @@ window.onload = function () {
 
 function initGame(){
 
-	for(i=0;i<7;i++){
+	for(var i=0;i<7;i++){
 		selecting_arr[i] = 0;
 	}
 
@@ -41,8 +41,6 @@ function initGame(){
 	player1.initCards();
 	player2.initCards();
 
-	dispHand(player1);
-	dispHand(player2);
     myTurnStart();
 }
 

@@ -9,6 +9,7 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
         this.frame = getCardFrame(num);
         this.isSelected = 0;		//選択されているか
         this.posi2 = _posi2;		//何枚目か(0なら一番左、一番下、等)
+        this.name = "cardSprite";
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
         console.log(selecting_arr);

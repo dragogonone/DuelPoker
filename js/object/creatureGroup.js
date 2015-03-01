@@ -8,6 +8,7 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
         this.posi2 = posi2;		//何枚目か(0なら一番左、一番下、等)
         this.isSelected = 0;		//選択されているか
         this.isTapped = 0;          //タップされているか
+        this.name = "creatureGroup";
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
     	if(this.isSelected==0){
@@ -23,7 +24,7 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
     },
     getPower: function(){//パワーを返す
         var x = 0;
-        for(i=0;i<this.cards.length;i++){
+        for(var i=0;i<this.cards.length;i++){
             if(this.cards[i] == 1){
                 x += 20;
             }else{

@@ -8,7 +8,7 @@ function popYamahuda(){
 
 //山札を初期化
 function initYamahuda(){
-	for(i=0;i<53;i++) {
+	for(var i=0;i<53;i++) {
 		yamahuda[i] = i+1;
 	}
 	shuffleYamahuda();
@@ -18,7 +18,7 @@ function initYamahuda(){
 //残りの山札をシャッフルする関数
 function shuffleYamahuda(){
 	var len = yamahuda.length;
-	for(i=0;i<len;i++) {
+	for(var i=0;i<len;i++) {
 		r = Math.floor(Math.random()*len);
 		w = yamahuda[i];
        	yamahuda[i]=yamahuda[r];

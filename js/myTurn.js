@@ -9,4 +9,5 @@ function myTurnStart(){
 
 function myTurnEnd(){
     console.log("1P Turn End");
+    console.log("hand:" + player1.hand);
 }
