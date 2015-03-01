@@ -12,8 +12,6 @@ var ROOM_HGT_1 = CARD_HGT + 20;				//メインのカード置き場の縦幅
 var selecting_arr = [];		 //選択中のカード入れ 1:選択中 0:非選択中
 var selecting_posi = 0;      //選択中のカードの所属ルーム　1:手札 2:フィールド
 
-var whichTurn = 0;            //現在どちらの手番か
-
 window.onload = function () {
     game = new Game(SCENE_WID, SCENE_HGT); // Gameオブジェクトの作成
     game.fps = FPS;				// フレームレートのセット
@@ -24,7 +22,7 @@ window.onload = function () {
         scene = game.rootScene;	// game.rootSceneは長いのでsceneに参照を割り当て
 		scene.backgroundColor = 'green';
         initGame();
-        turnStart();
+        myTurnStart();
     };
     game.start();
 
@@ -35,7 +33,6 @@ function initGame(){
 	for(i=0;i<7;i++){
 		selecting_arr[i] = 0;
 	}
-    whichTurn = 1;    //手番
 
     initYamahuda();
     dispLabels();
@@ -48,21 +45,4 @@ function initGame(){
 	dispHand(player1);
 	dispHand(player2);
 
-}
-
-
-function turnStart(){
-    console.log(whichTurn + "P Turn Start");
-    if(whichTurn == 1){
-        p = player1;
-    }else{
-        p = player2;
-    }
-    var x = p.drawCard();
-    addCardHand(p,x);
-    console.log(p.hand);
-}
-
-function turnEnd(){
-    console.log(whichTurn + "P Turn End");
 }

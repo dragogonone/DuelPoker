@@ -39,10 +39,11 @@ Player.prototype.summon = function(cards) {
 
 	//手札配列を詰める
 	this.hand = deleteArrZero(this.hand);
-	console.log("hand:" + this.hand);
 	this.field.push(creature);
 
-	addCardField(this, creature);//フィールドにカードを追加する
+	if(this.player==1){
+		myFieldRoom.addCard(creature);//フィールドにカードを追加する
+	}
 	eraseHand(this);//手札を一回削除する
 	dispHand(this);//新たな手札を再描画する
 	for(i=0;i<7;i++){//選択中のカード配列を空に

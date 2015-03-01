@@ -31,10 +31,10 @@ function dispLabels() {
 	var myFieldRoomLabel = new MyFieldRoomLabel();
 	myFieldRoom.addChild(myFieldRoomLabel);
 
-	myTrapRoom = new MyTrapRoomGroup();//自分の墓地
-	scene.addChild(myTrapRoom);
-	var myTrapRoomLabel = new MyTrapRoomLabel();
-	myTrapRoom.addChild(myTrapRoomLabel);
+	myTrushRoom = new MyTrushRoomGroup();//自分の墓地
+	scene.addChild(myTrushRoom);
+	var myTrushRoomLabel = new MyTrushRoomLabel();
+	myTrushRoom.addChild(myTrushRoomLabel);
 
 }
 
@@ -65,44 +65,5 @@ function eraseHand(player){
 		}
 		myHandRoomLabel = new MyHandRoomLabel();//手札置き場の色を再生
 		myHandRoom.addChild(myHandRoomLabel);
-	}
-}
-
-function addCardHand(player, card){//手札にカードを一枚追加する描写
-	var x =  player.hand.length - 1;
-	var sp = new CardSprite(card,x);
-	sp.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
-	if(player.player==1){
-		myHandRoom.addChild(sp);
-	}
-}
-
-
-
-
-function addCardField(player, cards){//フィールドにカードグループを追加
-	if(!player.field){
-		var x = 0;
-	}else{
-		var x = player.field.length;
-	}
-	console.log(cards);
-	var group = new CreatureGroup(player, x, cards);
-	if(player.player==1){
-		var y = cards.length;
-		for(i=0;i<y;i++){
-			var card = new CardSprite(cards[i], i);
-			card.moveTo(x*(CARD_WID + 5) - 60, ROOM_HGT_1 - CARD_HGT - ((y-i-1)*15));
-			group.addChild(card);
-		}
-		myFieldRoom.addChild(group);
-	}
-}
-
-function addCardTrush(player, card){//墓地にカードを追加 一番上のカードのみ表示すればよい
-	var sp = new CardSprite(card, player.trush.length + 1);
-	sp.moveTo(10,10);
-	if(player.player==1){
-		myTrapRoom.addChild(sp);
 	}
 }
