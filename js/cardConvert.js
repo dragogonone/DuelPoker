@@ -13,7 +13,7 @@ function numToCode(num,mark){
 	return code;
 }
 
-function codeToNum(num){
+function codeToNum(num){//数字コードを実際の数字とマークに分離して返す
 	code = [];
 	code[0] = parseInt((num-1) % 13 + 1);
 	code[1] = parseInt((num-1) / 13);

@@ -4,7 +4,7 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
         enchant.Sprite.call(this, CARD_WID, CARD_HGT);
         this.x = 160;
         this.y = 160;
-        this.number = num;
+        this.numberCode = num;      //カード番号 詳しくはcardConvert.jsを参照
         this.image = game.assets[TRUMP_IMG];
         this.frame = getCardFrame(num);
         this.isSelected = 0;		//選択されているか
@@ -31,7 +31,19 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
         }
 
         if(this.parentNode.name=="yamahudaRoom"){//山札をクリックしたとき
-            
+
         }
-  	}
+    },
+    getNumber:function(){//カードのマーク抜き数字を返す
+        var code = codeToNum(this.numberCode);
+        return(code[0]);
+    },
+    getMark:function(){//カードのマーク番号を返す
+        var code = codeToNum(this.numberCode);
+        return(code[1]);
+    },
+    getMarkName:function(){//カードのマークの日本語を返す
+        var code = codeToNum(this.numberCode);
+        return(code[2]);
+    }
 });
