@@ -1,11 +1,11 @@
 //プレイヤーのカード疑似クラス
 
 function Player(_player) {
-	this.player = _player;	//どっちプレイヤーなのか
-	this.hand = [];
-	this.field = [];
-	this.trush = [];
-	this.trap = [];
+	this.player = _player;	//どっちプレイヤーなのか int
+	this.hand = [];			//手札のカード配列	cardSprite型
+	this.field = [];		//フィールドのカード配列 creatureGroup型
+	this.trush = [];		//墓地のカード配列 cardSprite型
+	this.trap = [];			
 }
 
 //初期化
@@ -36,7 +36,6 @@ Player.prototype.drawCard = function() {
 //フィールドにカードを召喚
 //引数に手札のカード番号の配列
 Player.prototype.summon = function(cards) {
-	console.log(cards);
 	var creature = [];
 	var ln = cards.length;
 
@@ -59,4 +58,5 @@ Player.prototype.summon = function(cards) {
 
 	myHandRoom.leftenCards();//カードを詰める
 	selecting_arr = initArray(7);
+	selecting_posi = 0;
 }

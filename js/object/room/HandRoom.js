@@ -31,10 +31,8 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
         }
     },
     leftenCards: function(){//カードを左下に寄せる
-        console.log(this.player.hand);
-        console.log(this.childNodes.length);
+        console.log("hand"+this.player.hand);
         for(var i=1;i<this.childNodes.length;i++){
-            console.log(this.childNodes[i].posi2);
             this.childNodes[i].posi2 = i-1;
             this.childNodes[i].moveTo((i-1)*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
         }

@@ -10,4 +10,6 @@ function myTurnStart(){
 function myTurnEnd(){
     console.log("1P Turn End");
     console.log("hand:" + player1.hand);
+    console.log("seleposi:" + selecting_posi);
+    console.log("selearr" + selecting_arr);
 }

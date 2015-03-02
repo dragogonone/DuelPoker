@@ -35,7 +35,11 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
         }
 
         if(this.parentNode.name=="yamahudaRoom"){//山札をクリックしたとき
-
+            if(selecting_posi!=2){
+                console.log("残り山札:" + yamahuda.length + "枚");
+            }else{
+                attackToYamahuda();
+            }
         }
 
     },
