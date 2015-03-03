@@ -6,6 +6,13 @@ var YamahudaRoomGroup = enchant.Class.create(enchant.Group, {
 		this.x = 10;
 		this.y = 120;
         this.name = "yamahudaRoom"
+    },
+    ontouchend:function(){
+        if(selecting_posi!=2){
+            console.log("残り山札:" + yamahuda.length + "枚");
+        }else{
+            attackToYamahuda();
+        }
     }
 });
 

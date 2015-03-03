@@ -58,3 +58,15 @@ function initArray(num){
 	}
 	return arr;
 }
+
+
+//二つの数字を比較し大きい方が第何引数かを返す　同じなら0を返す
+function getBigger(n1,n2){
+	if(n1>n2){
+		return 1;
+	}else if(n1<n2){
+		return 2;
+	}else{
+		return 0;
+	}
+}

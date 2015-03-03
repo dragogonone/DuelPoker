@@ -13,10 +13,9 @@ var summonButtonLabel = enchant.Class.create(enchant.Label, {
         this.font = "26px 'ＭＳ ゴシック'";
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
-    	console.log(selecting_arr);
-    	var count = countArrNotZero(selecting_arr);
-    	var arr = makeArrNotZero(selecting_arr);
-    	if(count == 0){
+        var arr = player1.handRoom.getSelecting();
+        console.log(arr);
+    	if(arr == undefined){
     		console.log("カードが選択されていません");
     	}else{
     		player1.summon(arr);

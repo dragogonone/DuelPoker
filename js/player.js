@@ -1,11 +1,17 @@
 //プレイヤーのカード疑似クラス
+//room間のカードの移動なんかもここに
 
 function Player(_player) {
 	this.player = _player;	//どっちプレイヤーなのか int
 	this.hand = [];			//手札のカード配列	cardSprite型
 	this.field = [];		//フィールドのカード配列 creatureGroup型
 	this.trush = [];		//墓地のカード配列 cardSprite型
-	this.trap = [];			
+	this.trap = [];
+
+	this.handRoom = undefined; //roomをプレイヤーの所有物とする
+	this.fieldRoom = undefined;
+	this.trushRoom = undefined;
+	this.trupRoom = undefined;
 }
 
 //初期化
@@ -15,22 +21,17 @@ Player.prototype.initCards = function(){
 	this.trush = [];
 	this.trap = [];
 	for(var i=0;i<5;i++){//5枚ドロー
-		var card = popYamahuda();
+		var cardNum = popYamahuda();
+		var card = this.handRoom.addCard(cardNum);
 		this.hand[i] = card;
-		if(this.player==1){
-			myHandRoom.addCard(card);
-		}else if(this.player==2){
-			var c = eneHandRoom.addCard(card);
-			c.reverse();
-		}
 	}
 }
 
 //カードドロー
 Player.prototype.drawCard = function() {
 	var x = popYamahuda();
-	this.hand.push(x);
-	return x;
+	var card = this.handRoom.addCard(x);
+	this.hand.push(card);
 }
 
 //フィールドにカードを召喚
@@ -39,24 +40,18 @@ Player.prototype.summon = function(cards) {
 	var creature = [];
 	var ln = cards.length;
 
-	//クリーチャーのパワーを決定し使用したカードを手札から削除
+	//使用したカードを手札から削除
 	for(var i=0;i<ln;i++){
 		creature[i] = this.hand[cards[i]];
 		this.hand[cards[i]] = 0;
-		if(this.player==1){
-			myHandRoom.deleteCard(cards[i]);
-		}
+		this.handRoom.deleteCard(cards[i].posi2);
 	}
 
 	//手札配列を詰める
 	this.hand = deleteArrZero(this.hand);
-	this.field.push(creature);
 
-	if(this.player==1){
-		myFieldRoom.addGroup(creature);//フィールドにカードを追加する
-	}
+	this.fieldRoom.addGroup(creature);//フィールドにカードを追加する
 
-	myHandRoom.leftenCards();//カードを詰める
-	selecting_arr = initArray(7);
+	this.handRoom.leftenCards();//カードを詰める
 	selecting_posi = 0;
 }

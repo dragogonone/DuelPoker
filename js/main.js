@@ -11,8 +11,9 @@ var ROOM_WID_1 = SCENE_WID - 200;		    //長いカード置き場の横幅
 var ROOM_WID_2 = CARD_WID + 20;             //1枚のカード置き場の横幅
 
 var yamahuda = [];	//山札配列
-var selecting_arr = [];		 //選択中のカード入れ 1:選択中 0:非選択中
 var selecting_posi = 0;      //選択中のカードの所属ルーム　1:手札 2:フィールド
+var activePlayer = 0;       //どっちのターンか
+var nonActivePlayer = 0;    //↑ではない方のプレイヤー
 
 window.onload = function () {
     game = new Game(SCENE_WID, SCENE_HGT); // Gameオブジェクトの作成
@@ -30,9 +31,6 @@ window.onload = function () {
 };
 
 function initGame(){
-
-
-    selecting_arr = initArray(6);
 
     initYamahuda();//山札を初期化
 
@@ -64,33 +62,39 @@ function dispLabels() {
     sp.moveTo(10,10);
     yamahudaRoom.addChild(sp);
 
-    myHandRoom = new HandRoomGroup(player1);//自分の手札置き場
+    var myHandRoom = new HandRoomGroup(player1);//自分の手札置き場
     scene.addChild(myHandRoom);
+    player1.handRoom = myHandRoom;
     var myHandRoomLabel = new HandRoomLabel("myHandRoomLabel");
     myHandRoom.addChild(myHandRoomLabel);
 
-    myFieldRoom = new FieldRoomGroup(player1);//自分の手札置き場
+    var myFieldRoom = new FieldRoomGroup(player1);//自分の手札置き場
     scene.addChild(myFieldRoom);
+    player1.fieldRoom = myFieldRoom;
     var myFieldRoomLabel = new FieldRoomLabel("myFieldRoomLabel");
     myFieldRoom.addChild(myFieldRoomLabel);
 
-    myTrushRoom = new TrushRoomGroup(player1);//自分の墓地
+    var myTrushRoom = new TrushRoomGroup(player1);//自分の墓地
     scene.addChild(myTrushRoom);
+    player1.trushRoom = myTrushRoom;
     var myTrushRoomLabel = new TrushRoomLabel("myTrushRoomLabel");
     myTrushRoom.addChild(myTrushRoomLabel);
 
-    eneHandRoom = new HandRoomGroup(player2);//自分の手札置き場
+    var eneHandRoom = new HandRoomGroup(player2);//自分の手札置き場
     scene.addChild(eneHandRoom);
+    player2.handRoom = eneHandRoom;
     var eneHandRoomLabel = new HandRoomLabel("eneHandRoomLabel");
     eneHandRoom.addChild(eneHandRoomLabel);
 
-    eneFieldRoom = new FieldRoomGroup(player2);//自分の手札置き場
+    var eneFieldRoom = new FieldRoomGroup(player2);//自分の手札置き場
     scene.addChild(eneFieldRoom);
+    player2.fieldRoom = eneFieldRoom;
     var eneFieldRoomLabel = new FieldRoomLabel("eneFieldRoomLabel");
     eneFieldRoom.addChild(eneFieldRoomLabel);
 
-    eneTrushRoom = new TrushRoomGroup(player2);//自分の墓地
+    var eneTrushRoom = new TrushRoomGroup(player2);//自分の墓地
     scene.addChild(eneTrushRoom);
+    player2.trushRoom = eneTrushRoom;
     var eneTrushRoomLabel = new TrushRoomLabel("eneTrushRoomLabel");
     eneTrushRoom.addChild(eneTrushRoomLabel);
 

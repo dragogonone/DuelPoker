@@ -2,45 +2,32 @@
 var CardSprite = enchant.Class.create(enchant.Sprite, {
     initialize: function(num, _posi2){
         enchant.Sprite.call(this, CARD_WID, CARD_HGT);
-        this.x = 160;
-        this.y = 160;
         this.numberCode = num;      //カード番号 詳しくはcardConvert.jsを参照
         this.image = game.assets[TRUMP_IMG];
         this.frame = getCardFrame(num);
         this.posi2 = _posi2;		//何枚目か(0なら一番左、一番下、等)
         this.name = "cardSprite";
         this.isUra = 0;     //裏側表示かどうか
+        this.isSelected = 0;//選択されているか
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
         console.log(this.parentNode.name);
     	if(this.parentNode.name=="myHandRoom"){//手札のカードをクリックしたとき
             if(selecting_posi == 2){
-                myFieldRoom.deselect();
+                this.parentNode.player.fieldRoom.deselect();
             }
-            if(selecting_arr[this.posi2]==0){
+            if(this.isSelected==0){
                 this.y-=10;
-                selecting_arr[this.posi2] = 1;
+                this.isSelected = 1;
                 selecting_posi = 1;
             }else{
                 this.y+=10;
-                selecting_arr[this.posi2]  = 0;
+                this.isSelected = 0;
             }
-            console.log(selecting_arr);
+
+            console.log(this.parentNode.player.handRoom.getSelecting());
         }
 
-        //フィールドのカードはクリーチャーグループでまとめて扱っているのでここにクリック処理は記述しない
-
-        if(this.parentNode.name=="myTrushRoom"){//墓地をクリックしたとき
-            console.log("墓地カード:" + player1.trush);
-        }
-
-        if(this.parentNode.name=="yamahudaRoom"){//山札をクリックしたとき
-            if(selecting_posi!=2){
-                console.log("残り山札:" + yamahuda.length + "枚");
-            }else{
-                attackToYamahuda();
-            }
-        }
 
     },
     getNumber:function(){//カードのマーク抜き数字を返す

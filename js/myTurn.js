@@ -2,14 +2,14 @@
 
 function myTurnStart(){
     console.log("1P Turn Start");
-    var x = player1.drawCard();
-    myHandRoom.addCard(x);
+    selecting_posi = 0;
+    activePlayer = player1;
+    nonActivePlayer = player2;
+    player1.drawCard();
     console.log("hand:" + player1.hand);
 }
 
 function myTurnEnd(){
     console.log("1P Turn End");
     console.log("hand:" + player1.hand);
-    console.log("seleposi:" + selecting_posi);
-    console.log("selearr" + selecting_arr);
 }

@@ -14,13 +14,17 @@ var TrushRoomGroup = enchant.Class.create(enchant.Group, {
             this.name = "eneTrushRoom";
         }
     },
-    displayCard: function(card){//指定したカードを表示
-        var sp = new CardSprite(card, player1.trush.length + 1);
+    ontouchend: function(){
+        console.log("墓地カード:");
+        console.log(this.player.trush);
+    },
+    addCard: function(card){//指定したカードを墓地に生成し表示 引数は数字コード
+        var x =  this.player.trush.length;
+        var sp = new CardSprite(card,x);
         sp.moveTo(10,10);
         this.addChild(sp);
-    },
-    addCard: function(){//指定したカードを墓地配列に追加
         this.player.trush.push(card);
+        return sp;
     }
 });
 

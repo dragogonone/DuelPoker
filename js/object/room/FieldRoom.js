@@ -15,15 +15,16 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         }
     },
     addGroup: function(cards){
-        var x = this.player.field.length - 1;
-        var group = new CreatureGroup(this.player, x, cards);
+        var x = this.player.field.length;
+        var group = new CreatureGroup(x, cards);
         var y = cards.length;
         for(i=0;i<y;i++){
-            var card = new CardSprite(cards[i], i);
-            card.moveTo(x*(CARD_WID + 5) + 5, ROOM_HGT_1 - CARD_HGT - ((y-i-1)*15));
-            group.addChild(card);
+            cards[i].moveTo(0, 0 - ((y-i-1)*15));
+            group.addChild(cards[i]);
         }
+        group.moveTo(5 + x*(CARD_HGT + 5),ROOM_HGT_1 - CARD_HGT);
         this.addChild(group);
+        this.player.field.push(group);
     },
     deleteGroup: function(num){//引数は何番目にあるか、つまりposi2
         var x = 0;
@@ -35,15 +36,25 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         }
     },
     deselect: function(){//カードの選択を解除
-        for(i=1;i<this.childNodes.length;i++){
-            if(selecting_arr[i-1]==1){
-                console.log(this.childNodes[i]);
-                this.childNodes[i].y+=10;
-            }
+        var arr = this.getSelecting();
+        console.log(arr);
+        for(i=0;i<arr.length;i++){
+            this.player.field[arr[i]].y+=10;
+            this.player.field[arr[i]].isSelected = 0;
         }
         selecting_posi = 0;
-        selecting_arr = initArray(7);
+    },
+    getSelecting: function(){//選択中のカードグループの配列を返す
+        var arr = [];
+        console.log(this.player.field[0]);
+        for(var i=0;i<this.player.field.length;i++){
+            if(this.player.field[i].isSelected==1){
+                arr.push(i);
+            }
+        }
+        return arr;
     }
+
 
 });
 

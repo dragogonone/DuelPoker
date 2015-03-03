@@ -15,10 +15,13 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
         }
     },
     addCard: function(card){//手札にカードを一枚追加 //引数は数字コード
-        var x =  this.player.hand.length - 1;
+        var x =  this.player.hand.length;
         var sp = new CardSprite(card,x);
         sp.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
         this.addChild(sp);
+        if(this.player==2){
+            sp.reverse();
+        }
         return sp;
     },
     deleteCard: function(num){//引数は何番目にあるか、つまりposi2
@@ -35,14 +38,29 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
         for(var i=1;i<this.childNodes.length;i++){
             this.childNodes[i].posi2 = i-1;
             this.childNodes[i].moveTo((i-1)*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
+            this.childNodes[i].isSelected = 0;
         }
     },
     deselect: function(){//カードの選択を解除
         for(var i=1;i<=this.player.hand.length;i++){
             this.childNodes[i].moveTo((i-1)*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
+            this.childNodes[i].isSelected = 0;
         }
         selecting_posi = 0;
-        selecting_arr = initArray(7);
+    },
+    getSelecting: function(){//選択中のカードの配列を返す
+        var arr = [];
+        var count = 0;
+        for(i=0;i<this.player.hand.length;i++){
+            if(this.player.hand[i].isSelected==1){
+                arr.push(i)
+                count++;
+            }
+        }
+        if(count==0){
+            return undefined;
+        }
+        return arr;
     }
 });
 
