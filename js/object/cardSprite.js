@@ -13,13 +13,13 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
     ontouchend:function(){ // touchendイベントのイベントリスナー
         console.log(this.parentNode.name);
     	if(this.parentNode.name=="myHandRoom"){//手札のカードをクリックしたとき
-            if(selecting_posi == 2){
+            var fldSlt = this.parentNode.player.fieldRoom.getSelecting();
+            if(fldSlt != "no cards"){//既にフィールドのカードを選択していた場合
                 this.parentNode.player.fieldRoom.deselect();
             }
             if(this.isSelected==0){
                 this.y-=10;
                 this.isSelected = 1;
-                selecting_posi = 1;
             }else{
                 this.y+=10;
                 this.isSelected = 0;

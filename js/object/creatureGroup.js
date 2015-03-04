@@ -17,27 +17,32 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
                 console.log("タップされています");
                 return;
             }
+            var hndSlt = this.parentNode.player.handRoom.getSelecting();
+            var fldSlt = this.parentNode.player.fieldRoom.getSelecting();
             var x = this.isSelected;
-            if(selecting_posi == 1){
+            if(hndSlt != "no cards"){
                 this.parentNode.player.handRoom.deselect();
-                x = 0;
-            }else if(selecting_posi == 2){
+            }else if(fldSlt != "no cards"){
                 this.parentNode.player.fieldRoom.deselect();
             }
 
     	    if(x==0){
     		    this.y-=10;
     		    this.isSelected = 1;
-                selecting_posi = 2;
     	    }
        }else if(this.parentNode.name=="eneFieldRoom"){//相手のカード
-           console.log(this.getPower);
-           if(selecting_posi==2){//攻撃開始
+           console.log(this.getPower());
+           var fldSlt = activePlayer.fieldRoom.getSelecting();
+           console.log(fldSlt);
+           if(fldSlt != "no cards"){//攻撃開始
                if(this.isTapped==0){
                    console.log("アンタップ状態のクリーチャーには攻撃できない");
                    return;
                }
-               attackToCreature(this);
+               var aP = activePlayer;
+               var num = aP.fieldRoom.getSelecting();
+               var atCrt = aP.field[num[0]];
+               attack(atCrt,this);
            }
        }
     },
@@ -62,8 +67,6 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
         this.isTapped = 1;
         this.rotation = 90;
         this.moveTo(this.x + CARD_HGT,this.y + (CARD_HGT - CARD_WID));
-        console.log(this);
-        //console.log(this.cards[1]);
         for(var i=0;i<this.cards.length - 1;i++){
             this.cards[i].x = this.cards[i].y / 1.8;
             this.cards[i].y = 0;

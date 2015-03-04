@@ -5,12 +5,12 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         enchant.Group.call(this);
         this.player = _player;
         if(_player.player==1){
-            this.x = 20;
-            this.y = SCENE_HGT - (ROOM_HGT_1 * 2) - 10;
+            this.x = 200;
+            this.y = SCENE_HGT / 2 + 10;
             this.name = "myFieldRoom";
         }else if(_player.player==2){
-            this.x = SCENE_WID - ROOM_WID_1 - 20;
-            this.y = ROOM_HGT_1 + 10;
+            this.x = 200;
+            this.y = SCENE_HGT / 2 - ROOM_HGT_1 - 10;
             this.name = "eneFieldRoom";
         }
     },
@@ -26,31 +26,46 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         this.addChild(group);
         this.player.field.push(group);
     },
-    deleteGroup: function(num){//引数は何番目にあるか、つまりposi2
-        var x = 0;
-        for(i=1;i<this.childNodes.length;i++){//i=0は色用ラベルなので除外
-            if(num==this.childNodes[i].posi2){
-                this.removeChild(this.childNodes[i]);
-                break;
+    deleteGroup: function(creature){//引数はクリーチャーグループのスプライト もうこの関数自体いらないんじゃないかな
+        this.player.field[creature.posi2] = 0;
+        this.removeChild(creature);
+        this.leftenCards();
+    },
+    leftenCards: function(){//カードを左に寄せる
+        var field = this.player.field;
+        field = deleteArrZero(field);
+        for(var i=0;i<field.length;i++){
+            field[i].posi2 = i;
+            field[i].moveTo(i*(CARD_HGT + 5) + 5,field[i].y);
+            if(field[i].isTapped==1){
+                field[i].moveTo(field[i].x + CARD_HGT,field[i].y);
             }
+            field[i].isSelected = 0;
         }
     },
     deselect: function(){//カードの選択を解除
         var arr = this.getSelecting();
         console.log(arr);
+        if(arr=="no cards"){
+            return;
+        }
         for(i=0;i<arr.length;i++){
             this.player.field[arr[i]].y+=10;
             this.player.field[arr[i]].isSelected = 0;
         }
-        selecting_posi = 0;
     },
     getSelecting: function(){//選択中のカードグループの配列を返す
         var arr = [];
+        var count = 0;
         console.log(this.player.field[0]);
         for(var i=0;i<this.player.field.length;i++){
             if(this.player.field[i].isSelected==1){
                 arr.push(i);
+                count++;
             }
+        }
+        if(count==0){
+            return "no cards";
         }
         return arr;
     }
@@ -58,15 +73,46 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
 
 });
 
-var FieldRoomLabel = enchant.Class.create(enchant.Label, {
+//相当強引な方法で当たり判定を実現
+var FieldRoomColor = enchant.Class.create(enchant.Label, {
 	initialize: function(_name){
         enchant.Label.call(this);
-		this.backgroundColor = "orange";
+		this.backgroundColor = "lawngreen";
 		this.width = ROOM_WID_1;
 		this.height = ROOM_HGT_1;
+        this.text = "               "//
+        this.font = ROOM_HGT_1 + "px cursive";
+        this.color = this.backgroundColor;
+        this.name = _name;
+    },
+    ontouchend: function(){
+        console.log(this.parentNode.player.field);
+        if(this.parentNode.player==activePlayer && phase==1){
+            var cards = player1.handRoom.getSelecting();
+            console.log(cards);
+            if(cards == "no cards"){
+                console.log("カードが選択されていません");
+                return;
+            }
+            player1.summon(cards);
+        }
+    }
+});
+
+
+//Fieldroom全体にクリック判定をつけさせることに難航中
+var FieldRoomLabel = enchant.Class.create(enchant.Label, {
+    initialize: function(_name){
+        enchant.Label.call(this);
+        this.backgroundColor = "lawngreen";
+        this.width = ROOM_WID_1;
+        this.height = ROOM_HGT_1;
         this.text = "field"
         this.font = "14px cursive";
         this.color = "gray";
         this.name = _name;
+    },
+    ontouchend: function(){
+        console.log(this.name);
     }
 });

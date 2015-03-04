@@ -4,8 +4,8 @@ var turnendButtonLabel = enchant.Class.create(enchant.Label, {
         enchant.Label.call(this);
         this.width = 120;
         this.height = 24;
-        this.x = 480;
-        this.y = 440;
+        this.x = 700;
+        this.y = 540;
         this.backgroundColor = "orange";
         this.text = "Turn End";
         this.textAlign = "center";
@@ -13,6 +13,6 @@ var turnendButtonLabel = enchant.Class.create(enchant.Label, {
         this.font = "26px 'ＭＳ ゴシック'";
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
-        myTurnEnd();
+        turnEnd(activePlayer);
     }
 });
