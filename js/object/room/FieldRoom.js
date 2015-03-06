@@ -5,20 +5,21 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         enchant.Group.call(this);
         this.player = _player;
         if(_player.player==1){
-            this.x = 200;
+            this.x = (SCENE_WID - ROOM_WID_1) / 2;
             this.y = SCENE_HGT / 2 + 10;
             this.name = "myFieldRoom";
         }else if(_player.player==2){
-            this.x = 200;
+            this.x = (SCENE_WID - ROOM_WID_1) / 2;
             this.y = SCENE_HGT / 2 - ROOM_HGT_1 - 10;
             this.name = "eneFieldRoom";
         }
     },
     addGroup: function(cards){
         var x = this.player.field.length;
-        var group = new CreatureGroup(x, cards);
+        var group = new CreatureGroup(x, cards,this.player);
         var y = cards.length;
         for(i=0;i<y;i++){
+            var card = cards
             cards[i].moveTo(0, 0 - ((y-i-1)*15));
             group.addChild(cards[i]);
         }
@@ -45,7 +46,6 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
     },
     deselect: function(){//カードの選択を解除
         var arr = this.getSelecting();
-        console.log(arr);
         if(arr=="no cards"){
             return;
         }
@@ -57,9 +57,22 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
     getSelecting: function(){//選択中のカードグループの配列を返す
         var arr = [];
         var count = 0;
-        console.log(this.player.field[0]);
         for(var i=0;i<this.player.field.length;i++){
             if(this.player.field[i].isSelected==1){
+                arr.push(i);
+                count++;
+            }
+        }
+        if(count==0){
+            return "no cards";
+        }
+        return arr;
+    },
+    getUntap: function(){//アンタップ状態にあるカードグループの配列を返す
+        var arr = [];
+        var count = 0;
+        for(var i=0;i<this.player.field.length;i++){
+            if(this.player.field[i].isTapped==0){
                 arr.push(i);
                 count++;
             }
@@ -87,11 +100,11 @@ var FieldRoomColor = enchant.Class.create(enchant.Label, {
     },
     ontouchend: function(){
         console.log(this.parentNode.player.field);
+        console.log(this.parentNode.childNodes);
         if(this.parentNode.player==activePlayer && phase==1){
             var cards = player1.handRoom.getSelecting();
-            console.log(cards);
             if(cards == "no cards"){
-                console.log("カードが選択されていません");
+                console.log("召喚:カードが選択されていません");
                 return;
             }
             player1.summon(cards);

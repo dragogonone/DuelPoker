@@ -1,39 +1,42 @@
 //カード番号と実際の数字、マークの変換など
 
 //数字コード
-//1〜13 ハート:0
-//14〜26 スペード:1
-//27〜39 ダイヤ:2
-//40〜52 クローバー:3
+//1〜13 ハート:1
+//14〜26 スペード:2
+//27〜39 ダイヤ:3
+//40〜52 クローバー:4
 //53 Joker
 //55 裏
 
 function numToCode(num,mark){
-	code = num * mark;
+	var code = num +  ((mark-1)*13);
 	return code;
 }
 
-function codeToNum(num){//数字コードを実際の数字とマークに分離して返す
-	code = [];
-	code[0] = parseInt((num-1) % 13 + 1);
-	code[1] = parseInt((num-1) / 13);
-	code[2] = getMarkName(parseInt((num-1) / 13));
-	return code;
+function codeToNum(code){//数字コードの実際の数字を返す
+	var num = parseInt((code-1) % 13 + 1);
+	return num;
 }
+
+function codeToMark(code){//数字コードのマークを返す
+	var mark = parseInt((code-1) / 13) + 1;
+	return mark;
+}
+
 
 function getMarkName(mark){
-	ret = "";
+	var ret = "";
 	switch(mark){
-	case 0:
+	case 1:
 		ret = "ハート";
 		break;
-	case 1:
+	case 2:
 		ret = "スペード";
 		break;
-	case 2:
+	case 3:
 		ret = "ダイヤ";
 		break;
-	case 3:
+	case 4:
 		ret = "クローバー";
 		break;
 	}
@@ -43,16 +46,17 @@ function getMarkName(mark){
 
 //trump.gifの素材からenchant.jsのframe数を返す
 //引数は数字コードで返り値がframe数
-function getCardFrame(num){
-	pair = codeToNum(num);
-	if (num == 53) { return 52; }//ジョーカー
-	if (num == 55) { return 54; }//裏面
+function getCardFrame(code){
+	var	num = codeToNum(code);
+	var mark = codeToMark(code);
+	if (code == 53) { return 52; }//ジョーカー
+	if (code == 55) { return 54; }//裏面
 
-	if(pair[0] < 8) //左側
+	if(num < 8) //左側
 	{
-		ret = (pair[0]-1) * 8 + pair[1];
+		var ret = (num-1) * 8 + (mark - 1);
 	}else{//右側
-		ret = (pair[0]-8) * 8 + pair[1] + 4;
+		var ret = (num-8) * 8 + (mark - 1) + 4;
 	}
 	return parseInt(ret);
 }

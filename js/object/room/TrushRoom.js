@@ -5,18 +5,19 @@ var TrushRoomGroup = enchant.Class.create(enchant.Group, {
         enchant.Group.call(this);
         this.player = _player;
         if(_player.player==1){
-            this.x = ROOM_WID_1 + 205;
-            this.y = SCENE_HGT / 2 + 5;
+            this.x = (SCENE_WID + ROOM_WID_1) / 2 + 5;
+            this.y = SCENE_HGT / 2 + 10;
             this.name = "myTrushRoom";
         }else if(_player.player==2){
-            this.x = ROOM_WID_1 + 205;
-            this.y = SCENE_HGT / 2 - ROOM_HGT_1 - 5;
+            this.x = (SCENE_WID + ROOM_WID_1) / 2 + 5;
+            this.y = SCENE_HGT / 2 - ROOM_HGT_1 - 10;
             this.name = "eneTrushRoom";
         }
     },
     ontouchend: function(){
         console.log("墓地カード:" + this.player.trush.length + "枚");
         console.log(this.player.trush);
+        console.log(this.parentNode.childNodes);
     },
     addCard: function(card){//指定したカードを墓地に生成し表示 引数は数字コード
         var x =  this.player.trush.length;

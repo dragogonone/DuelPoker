@@ -42,14 +42,26 @@ Player.prototype.summon = function(cards) {
 	var creature = [];
 	var ln = cards.length;
 
-	//使用したカードを手札から削除
+
 	for(var i=0;i<ln;i++){
 		creature[i] = this.hand[cards[i]];
-		this.hand[cards[i]] = 0;
 	}
 
-	this.fieldRoom.addGroup(creature);//フィールドにカードを追加する
+	//使用したカードを手札から削除
+	for(var i=0;i<ln;i++){
+		this.handRoom.deleteCard(creature[i]);
+	}
+	creature = card_array_sort(creature);
 
+	var codes = [];
+	for(var i=0;i<creature.length;i++){
+		codes[i] = creature[i].numberCode;
+	}
+	var yaku = judgePoker(codes);
+	console.log("役:" + getYakuName(yaku[0]));
+
+	this.fieldRoom.addGroup(creature);//フィールドにカードを追加する
+	console.log(this.fieldRoom);
 	this.handRoom.leftenCards();//カードを詰める
 }
 

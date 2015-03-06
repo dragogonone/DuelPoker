@@ -1,13 +1,12 @@
 //クリーチャーグループのクラス フィールドに出ているユニットごとにインスタンスを生成
 
 var CreatureGroup = enchant.Class.create(enchant.Group, {
-    initialize: function(posi2, cards){
-        enchant.Group.call(this, posi2, cards);
+    initialize: function(posi2, cards,_player){
+        enchant.Group.call(this);
         this.cards = cards;
         this.posi2 = posi2;		//何枚目か(0なら一番左、一番下、等)
+        this.player = _player;
         this.isTapped = 0;          //タップされているか
-        //this.originX = CARD_WID / 2;
-        //this.originY = CARD_HGT / 2 + 15 * (cards.length - 1);
         this.name = "creatureGroup";
         this.isSelected = 0;
     },
@@ -17,13 +16,13 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
                 console.log("タップされています");
                 return;
             }
-            var hndSlt = this.parentNode.player.handRoom.getSelecting();
-            var fldSlt = this.parentNode.player.fieldRoom.getSelecting();
+            var hndSlt = this.player.handRoom.getSelecting();
+            var fldSlt = this.player.fieldRoom.getSelecting();
             var x = this.isSelected;
             if(hndSlt != "no cards"){
-                this.parentNode.player.handRoom.deselect();
+                this.player.handRoom.deselect();
             }else if(fldSlt != "no cards"){
-                this.parentNode.player.fieldRoom.deselect();
+                this.player.fieldRoom.deselect();
             }
 
     	    if(x==0){
@@ -42,7 +41,7 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
                var aP = activePlayer;
                var num = aP.fieldRoom.getSelecting();
                var atCrt = aP.field[num[0]];
-               attack(atCrt,this);
+               battle = new Battle(atCrt,this);
            }
        }
     },

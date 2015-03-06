@@ -20,6 +20,7 @@ var phase = 0;              //現在のフェイズ
                             //↑は変わっていく可能性大
 var activePlayer = 0;       //どっちのターンか
 var nonActivePlayer = 0;    //↑ではない方のプレイヤー
+var battle = undefined;             //バトルのインスタンス
 
 window.onload = function () {
     game = new Game(SCENE_WID, SCENE_HGT); // Gameオブジェクトの作成

@@ -5,18 +5,18 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
         enchant.Group.call(this);
         this.player = _player;
         if(_player.player==1){
-		    this.x = 10;
+		    this.x = (SCENE_WID - ROOM_WID_1) / 2;
 		    this.y = SCENE_HGT - ROOM_HGT_1;
             this.name = "myHandRoom";
         }else if(_player.player==2){
-            this.x = SCENE_WID - ROOM_WID_1 - 10;
+            this.x = (SCENE_WID - ROOM_WID_1) / 2;
             this.y = 0;
             this.name = "eneHandRoom";
         }
     },
     addCard: function(card){//手札にカードを一枚追加 //引数は数字コード
         var x =  this.player.hand.length;
-        var sp = new CardSprite(card,x);
+        var sp = new CardSprite(card,x,this.player);
         sp.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
         this.addChild(sp);
         if(this.player.player==2){//相手のカードは裏返して追加
@@ -75,6 +75,7 @@ var HandRoomColor = enchant.Class.create(enchant.Label, {
     },
     ontouchend: function(){
         console.log(this.parentNode.player.hand);
+        console.log(this.parentNode.childNodes);
     }
 });
 
