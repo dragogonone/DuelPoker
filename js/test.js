@@ -45,8 +45,8 @@ function testAA(){
         case 80://p
             console.log("pokerCheck");
             var codes = [2,1,3,4,16];
-            var nums = [3,4,3,3,4];
-            var marks = [1,1,1,1,1];
+            var nums = [1,2,1,2,1];
+            var marks = [3,3,2,2,1];
             for(var i=0;i<codes.length;i++){
                 codes[i] = numToCode(nums[i],marks[i]);
                 //nums[i] = codeToNum(codes[i]);
@@ -55,9 +55,10 @@ function testAA(){
             var sortArr = sortArray(nums.concat());
             console.log(nums);
             console.log(marks);
-            console.log(codes);
-            console.log(flushPoker(marks));
-            console.log(judgePoker(codes));
+            //console.log(codes);
+            //console.log(flushPoker(marks));
+            console.log(fullHouse(nums));
+            //console.log(judgePoker(codes));
             break;
         case 65://a
             console.log("enemyAttack");
@@ -67,7 +68,8 @@ function testAA(){
             break;
         case 87://w
             console.log("handChange");
-            var new_hand = [1,2,3,4,5,6];
+            //var new_hand = [1,15,29,43,5];
+            var new_hand = [1,2,14,27,40,6];
             var ln = player1.hand.length;
             for(var i=0;i<ln;i++){
                 handToYamahudaCard(player1.hand[0]);
@@ -76,6 +78,15 @@ function testAA(){
                 var card = player1.handRoom.addCard(new_hand[i]);
                 player1.hand.push(card);
             }
+            break;
+        case 78://n
+            console.log("create name");
+            var codes = [2];
+            console.log(createName(codes));
+            console.log(createName([1,3]));
+            console.log(createName([29,4,50]));
+            console.log(createName([3,32,44,21]));
+            console.log(createName([14,15,43,32,1]));
             break;
     }
 }

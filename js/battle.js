@@ -18,7 +18,7 @@ var Battle = enchant.Class.create({
             this.nP = player1;
         }
 
-        console.log(this.atCrt.getPower() + " tried to attack to " + this.dfCrt);
+        console.log(this.atCrt.creatureName + " tried to attack to " + this.cratureName);
 
         //ここにブロックの処理を書く
         if(this.nP.isMan==1){

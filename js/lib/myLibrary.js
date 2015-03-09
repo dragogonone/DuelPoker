@@ -71,26 +71,6 @@ function sortArray(arr){
     return arr;
 }
 
-//カード配列を実際の数字でソートして返す
-function card_array_sort(data,order){
-	//デフォは昇順(ASC)
-	var num_a = 1;
-	var num_b = -1;
-
-	if(order === 'desc'){//指定があれば降順(DESC)
-		num_a = -1;
-		num_b = 1;
-	}
-
-	data = data.sort(function(a, b){
-		var x = a.getNumber();
-		var y = b.getNumber();
-		if (x > y) return num_a;
-		if (x < y) return num_b;
-		return 0;
-	});
-	return data;
-}
 
 //二つの数字を比較し大きい方が第何引数かを返す　同じなら0を返す
 function getBigger(n1,n2){

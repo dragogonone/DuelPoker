@@ -13,14 +13,15 @@ function judgePoker(codes){
     }
 
     var yaku = [];
-    yaku[0] = twoPair(nums);
-    yaku[1] = threeCard(nums);
-    yaku[2] = flushPoker(marks);
-    yaku[3] = straightPoker(nums);
-    yaku[4] = fullHouse(nums);
-    yaku[5] = fourCard(nums);
-    yaku[6] = straightFlush(nums,marks);
-    yaku[7] = royalStraightFlush(nums,marks);
+    yaku[0] = 0;
+    yaku[1] = twoPair(nums);
+    yaku[2] = threeCard(nums);
+    yaku[3] = flushPoker(marks);
+    yaku[4] = straightPoker(nums);
+    yaku[5] = fullHouse(nums);
+    yaku[6] = fourCard(nums);
+    yaku[7] = straightFlush(nums,marks);
+    yaku[8] = royalStraightFlush(nums,marks);
 
     for(var i=0;i<8;i++){
         if(yaku[i]){ ret = [i,yaku[i]]; }
@@ -29,30 +30,44 @@ function judgePoker(codes){
     return ret;
 }
 
+//カードスプライトの配列から役を判定する
+function judgePokerByCreature(creature){
+    var codes = [];
+    for(var i=0;i<creature.length;i++){
+        codes[i] = creature[i].numberCode;
+    }
+    var yaku = judgePoker(codes);
+    return yaku;
+}
+
+
 function getYakuName(num){
     switch(num){
         case 0:
-            var ret = "ツーペア";
+            var ret = "役なし"
             break;
         case 1:
-            var ret = "スリーカード";
+            var ret = "ツーペア";
             break;
         case 2:
-            var ret = "フラッシュ";
+            var ret = "スリーカード";
             break;
         case 3:
-            var ret = "ストレート";
+            var ret = "フラッシュ";
             break;
         case 4:
-            var ret = "フルハウス";
+            var ret = "ストレート";
             break;
         case 5:
-            var ret = "フォーカード";
+            var ret = "フルハウス";
             break;
         case 6:
-            var ret = "ストレートフラッシュ";
+            var ret = "フォーカード";
             break;
         case 7:
+            var ret = "ストレートフラッシュ";
+            break;
+        case 8:
             var ret = "ロイヤルストレートフラッシュ";
             break;
     }
@@ -87,7 +102,7 @@ function twoPair(nums){
     var ret = [0];
     for(var i=0;i<arr.length;i++){
         if(arr[i]==0){ continue; }
-        var oP = onePair(nums);
+        var oP = onePair(arr);
         if(oP!=0){//見つかった
             arr[oP[0]] = 0;
             arr[oP[1]] = 0;
@@ -214,8 +229,6 @@ function fullHouse(nums){
     arr[threes[0]] = 0;
     arr[threes[1]] = 0;
     arr[threes[2]] = 0;
-
-    arr = deleteArrZero(arr);
 
     var pair = onePair(arr);
     if(pair==0){

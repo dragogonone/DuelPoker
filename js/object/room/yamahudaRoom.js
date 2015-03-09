@@ -16,6 +16,7 @@ var YamahudaRoomGroup = enchant.Class.create(enchant.Group, {
             battle = new Battle(atCrt,this);
         }else{
             console.log("残り山札:" + yamahuda.length + "枚");
+            console.log(yamahuda);
         }
     },
     deleteImg: function(){

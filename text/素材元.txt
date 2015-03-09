@@ -1,2 +1,5 @@
 trump.gif
 http://sozai.7gates.net/
+
+MIT LICENSE
+http://opensource.org/licenses/mit-license.php

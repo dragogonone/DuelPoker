@@ -3,8 +3,8 @@
 function turnStart(player){//ターンの始まるプレイヤーが引数
     console.log(player.player + "P Turn Start");
     player.drawCard();
-    console.log("hand:" + player1.hand);
     phase = 1;
+    player.isSummoned = 0;
 
     if(player.isMan==0){
         console.log("CPU turn");
@@ -15,7 +15,6 @@ function turnStart(player){//ターンの始まるプレイヤーが引数
 }
 
 function turnEnd(player){//ターンの終わるプレイヤーが引数
-    console.log(player.player + "P Turn End");
 
     if(isYamaNone == 1){
         endGame();
@@ -31,8 +30,10 @@ function turnEnd(player){//ターンの終わるプレイヤーが引数
 function afterCardBack(){
     if(activePlayer == player1){
         activePlayer = player2;
+        nonActivePlayer = player1;
     }else{
         activePlayer = player1;
+        nonActivePlayer = player2;
     }
     console.log(activePlayer);
     turnStart(activePlayer);
@@ -41,5 +42,7 @@ function afterCardBack(){
 //CPUがどういう行動を取るのかを記述
 function CPUturnStart(){
     turnEnd(activePlayer);
+    //召喚
+    //攻撃
     afterCardBack();
 }

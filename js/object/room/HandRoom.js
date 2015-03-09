@@ -20,7 +20,7 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
         sp.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
         this.addChild(sp);
         if(this.player.player==2){//相手のカードは裏返して追加
-            //sp.reverse(); //開発中は切る
+            sp.reverse(); //開発中は切る
         }
         return sp;
     },
@@ -75,7 +75,6 @@ var HandRoomColor = enchant.Class.create(enchant.Label, {
     },
     ontouchend: function(){
         console.log(this.parentNode.player.hand);
-        console.log(this.parentNode.childNodes);
     }
 });
 

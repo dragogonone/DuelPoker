@@ -18,7 +18,7 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         var x = this.player.field.length;
         var group = new CreatureGroup(x, cards,this.player);
         var y = cards.length;
-        for(i=0;i<y;i++){
+        for(var i=0;i<y;i++){
             var card = cards
             cards[i].moveTo(0, 0 - ((y-i-1)*15));
             group.addChild(cards[i]);
@@ -26,8 +26,14 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         group.moveTo(5 + x*(CARD_HGT + 5),ROOM_HGT_1 - CARD_HGT);
         this.addChild(group);
         this.player.field.push(group);
+        return group;
     },
     deleteGroup: function(creature){//引数はクリーチャーグループのスプライト もうこの関数自体いらないんじゃないかな
+        if(creature.isDivineShield==1){
+            console.log(creature.creatureName + "のバリアが解けた！");
+            creature.isDiveShield = 0;
+            return;
+        }
         this.player.field[creature.posi2] = 0;
         this.removeChild(creature);
         this.leftenCards();
@@ -83,7 +89,6 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
         return arr;
     }
 
-
 });
 
 //相当強引な方法で当たり判定を実現
@@ -100,13 +105,8 @@ var FieldRoomColor = enchant.Class.create(enchant.Label, {
     },
     ontouchend: function(){
         console.log(this.parentNode.player.field);
-        console.log(this.parentNode.childNodes);
         if(this.parentNode.player==activePlayer && phase==1){
             var cards = player1.handRoom.getSelecting();
-            if(cards == "no cards"){
-                console.log("召喚:カードが選択されていません");
-                return;
-            }
             player1.summon(cards);
         }
     }

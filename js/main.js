@@ -5,10 +5,13 @@ var SCENE_WID = 960;			//画面横幅
 var SCENE_HGT = 640;			//画面縦幅
 var CARD_WID = 60;				// カードの縦幅
 var CARD_HGT = 90;				// カードの横幅
-var TRUMP_IMG = "img/trump.gif"		// トランプの画像
 var ROOM_HGT_1 = CARD_HGT + 20;				//カード置き場の縦幅
 var ROOM_WID_1 = ((CARD_WID + 5) * 7) + 5;		    //長いカード置き場の横幅
 var ROOM_WID_2 = CARD_WID + 20;             //1枚のカード置き場の横幅
+
+var TRUMP_IMG = "img/trump.gif";		// トランプの画像
+var BGM = "sound/";
+
 
 var yamahuda = [];	//山札配列
 var isYamaNone = 0; //山札が切れたときのフラグ
@@ -17,7 +20,9 @@ var phase = 0;              //現在のフェイズ
                             //1:自分のターンの自由フェイズ
                             //2:ターン終了時のカード交換
                             //3:ブロッカー選択
+                            //4:攻撃後の効果対象選択
                             //↑は変わっていく可能性大
+var yakuGlobal = 0;         //役を保存しておくグローバル変数 美しくないので変えたいところ
 var activePlayer = 0;       //どっちのターンか
 var nonActivePlayer = 0;    //↑ではない方のプレイヤー
 var battle = undefined;             //バトルのインスタンス
@@ -44,12 +49,16 @@ function initGame(){
 	player1 = new Player(1,1)//(_player,isMan);
 	player2 = new Player(2,0);
 
+    player1.enemyPlayer = player2;
+    player2.enemyPlayer = player1;
+
     dispLabels();   //ラベルやroomを生成して画面に表示　長いので下に追いやった
 
 	player1.initCards();
 	player2.initCards();
 
     activePlayer = player1;
+    nonActivePlayer = player2;
 
     turnStart(activePlayer);
 }

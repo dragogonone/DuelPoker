@@ -9,9 +9,19 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
         this.isTapped = 0;          //タップされているか
         this.name = "creatureGroup";
         this.isSelected = 0;
+        this.isDivineShield = 0;
+        this.isSummoningSickness = 1;
+        var codes = [];
+        for(var i=0;i<cards.length;i++){
+            codes[i] = cards[i].numberCode;
+        }
+        this.creatureName = createName(codes);
+
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
         if(this.parentNode.name=="myFieldRoom"){//自分のカード
+            if(phase!=1){ return; }
+            console.log(this.creatureName + " パワー:" + this.getPower());
             if(this.isTapped == 1){
                 console.log("タップされています");
                 return;
@@ -30,18 +40,33 @@ var CreatureGroup = enchant.Class.create(enchant.Group, {
     		    this.isSelected = 1;
     	    }
        }else if(this.parentNode.name=="eneFieldRoom"){//相手のカード
-           console.log(this.getPower());
-           var fldSlt = activePlayer.fieldRoom.getSelecting();
-           console.log(fldSlt);
-           if(fldSlt != "no cards"){//攻撃開始
-               if(this.isTapped==0){
-                   console.log("アンタップ状態のクリーチャーには攻撃できない");
-                   return;
+           if(phase==4){
+               console.log("攻撃後の処理");
+               switch(yakuGlobal){
+                   case 2:
+                       fieldToTrushCard(this);
+                       break;
+                   case 6:
+                       fieldToEnemyField(this);
+                        break;
+                    default:
+                        console.log("攻撃後の処理でエラーっぽいことになっています");
+                        break;
                }
-               var aP = activePlayer;
-               var num = aP.fieldRoom.getSelecting();
-               var atCrt = aP.field[num[0]];
-               battle = new Battle(atCrt,this);
+               phase=1;
+           }else if(phase==1){
+               console.log(this.cratureName + this.getPower());
+               var fldSlt = activePlayer.fieldRoom.getSelecting();
+               if(fldSlt != "no cards"){//攻撃開始
+                   if(this.isTapped==0){
+                       console.log("アンタップ状態のクリーチャーには攻撃できない");
+                       return;
+                   }
+                   var aP = activePlayer;
+                   var num = aP.fieldRoom.getSelecting();
+                   var atCrt = aP.field[num[0]];
+                   battle = new Battle(atCrt,this);
+               }
            }
        }
     },

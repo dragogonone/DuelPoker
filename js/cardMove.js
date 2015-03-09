@@ -4,13 +4,22 @@
 //フィールドのカードを墓地へ送る
 //引数に死ぬクリーチャーのインスタンス
 function fieldToTrushCard(creature){
-	console.log(creature);
 	var p = creature.player;
-	console.log(p);
 	p.fieldRoom.deleteGroup(creature);
 	for(i=0;i<creature.cards.length;i++){
 		p.trushRoom.addCard(creature.cards[i].numberCode);
 	}
+}
+
+//心変わり
+function fieldToEnemyField(creature){
+	var p = creature.player;
+	p.fieldRoom.deleteGroup(creature);
+	var newCrt = [];
+	for(i=0;i<creature.cards.length;i++){
+		newCrt[i] = creature.cards[i];
+	}
+	p.enemyPlayer.fieldRoom.addGroup(newCrt);
 }
 
 //山札のカードを墓地へ送る
