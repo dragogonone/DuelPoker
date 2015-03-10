@@ -4,6 +4,7 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
     initialize: function(_player){
         enchant.Group.call(this);
         this.player = _player;
+        this.room = "hand";
         if(_player.player==1){
 		    this.x = (SCENE_WID - ROOM_WID_1) / 2;
 		    this.y = SCENE_HGT - ROOM_HGT_1;
@@ -17,16 +18,19 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
     addCard: function(card){//手札にカードを一枚追加 //引数は数字コード
         var x =  this.player.hand.length;
         var sp = new CardSprite(card,x,this.player);
-        sp.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
+        sp.moveTo(yamahudaRoom.x - this.x,yamahudaRoom.y - this.y);
+        var frame_temp = this.frame;
+        //this.frame = 54;
+        sp.tl.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT, CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+             //.scaleTo(0, 1, 5, enchant.Easing.QUAD_EASEIN)
+             //.then(function(){this.frame = frame_temp})
+             //.scaleTo(1, 1, 5, enchant.Easing.QUAD_EASEOUT);
         this.addChild(sp);
         if(this.player.player==2){//相手のカードは裏返して追加
-            sp.reverse(); //開発中は切る
+            sp.frame = 54;
+            sp.isUra = 1;
         }
         return sp;
-    },
-    deleteCard: function(card){//引数はカードのスプライト
-        this.player.hand[card.posi2] = 0;
-        this.removeChild(card);
     },
     leftenCards: function(){//カードを左下に寄せる
         this.player.hand = deleteArrZero(this.player.hand);

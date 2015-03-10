@@ -3,7 +3,7 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
     initialize: function(num, _posi2,_player){
         enchant.Sprite.call(this, CARD_WID, CARD_HGT);
         this.numberCode = num;      //カード番号 詳しくはcardConvert.jsを参照
-        this.className = "cardSprite";  //cssのカードスプライト
+        //this.className = "cardSprite";  //cssのカードスプライト
         this.player = _player;
         this.image = game.assets[TRUMP_IMG];
         this.frame = getCardFrame(num);
@@ -44,12 +44,16 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
     },
     reverse:function(){//表裏を反転する
         if(this.isUra==0){//もともと表だった場合
-            this.frame = 54;
+            var new_frame = 54;
             this.isUra = 1;
         }else{
-            this.frame = getCardFrame(num);
+            var new_frame = getCardFrame(num);
             this.isUra = 0;
         }
-
+        this.tl.scaleTo(0, 1, REVERSE_SPEED, enchant.Easing.QUAD_EASEIN)
+            .then(function(){this.frame = new_frame;})
+            .scaleTo(1, 1, REVERSE_SPEED, enchant.Easing.QUAD_EASEOUT);
+            console.log(new_frame);
+        return this.frame;
     }
 });

@@ -27,6 +27,7 @@ var okButtonLabel = enchant.Class.create(enchant.Label, {
                 }
 
                 for(var i=0;i<cards.length;i++){
+                    //cardMove(backCards[i],p.handRoom,yamahudaRoom);
                     handToYamahudaCard(backCards[i]);
                 }
             }

@@ -6,6 +6,7 @@ var YamahudaRoomGroup = enchant.Class.create(enchant.Group, {
 		this.x = (SCENE_WID - ROOM_WID_1) / 2 - ROOM_WID_2 - 5;
 		this.y = (SCENE_HGT -ROOM_HGT_1) / 2;
         this.name = "yamahudaRoom";
+        this.room = "yamahuda";
     },
     ontouchend:function(){
         var aP = activePlayer;

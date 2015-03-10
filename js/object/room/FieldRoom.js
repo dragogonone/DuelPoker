@@ -4,6 +4,7 @@ var FieldRoomGroup = enchant.Class.create(enchant.Group, {
     initialize: function(_player){
         enchant.Group.call(this);
         this.player = _player;
+        this.room = "field";
         if(_player.player==1){
             this.x = (SCENE_WID - ROOM_WID_1) / 2;
             this.y = SCENE_HGT / 2 + 10;

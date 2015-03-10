@@ -1,6 +1,8 @@
 enchant();  // 初期化
 
 var FPS = 30;    				// フレームレート
+var CARD_SPEED = 20;            //カードの移動フレーム
+var REVERSE_SPEED = 4;          //カードが裏返るときのスピード
 var SCENE_WID = 960;			//画面横幅
 var SCENE_HGT = 640;			//画面縦幅
 var CARD_WID = 60;				// カードの縦幅

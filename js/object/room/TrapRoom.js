@@ -4,6 +4,7 @@ var TrapRoomGroup = enchant.Class.create(enchant.Group, {
     initialize: function(){
         enchant.Group.call(this);
         this.player = _player;
+        this.room = "trap";
         if(_player.player==1){
             this.x = 10;
             this.y = SCENE_HGT - ((ROOM_HGT_1+5) * 2);
