@@ -16,9 +16,6 @@ var TrushRoomGroup = enchant.Class.create(enchant.Group, {
         }
     },
     ontouchend: function(){
-        console.log("墓地カード:" + this.player.trush.length + "枚");
-        console.log(this.player.trush);
-        console.log(this.parentNode.childNodes);
     },
     addCard: function(card){//指定したカードを墓地に生成し表示 引数は数字コード
         var x =  this.player.trush.length;

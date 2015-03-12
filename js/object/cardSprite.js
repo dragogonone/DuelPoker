@@ -13,10 +13,27 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
         this.isSelected = 0;//選択されているか
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
-    	if(this.parentNode.name=="myHandRoom"){//手札のカードをクリックしたとき
-            var fldSlt = this.player.fieldRoom.getSelecting();
+        if(this.numberCode==55){//山札
+            var aP = activePlayer;
+            var fldSlt = aP.getSelecting(aP.field);
+            if(fldSlt != "no cards"){
+                var num = aP.getSelecting(aP.field);
+                var atCrt = aP.field[num[0]];
+                battle = new Battle(atCrt,yamahudaRoom);
+            }else{
+                console.log("残り山札:" + yamahuda.length + "枚");
+                console.log(yamahuda);
+            }
+            return;
+        }
+        if(this.player.trush[this.posi2]==this){
+            console.log("墓地カード:" + this.player.trush.length + "枚");
+            console.log(this.player.trush);
+        }
+    	if(this.player.hand[this.posi2]==this){//手札のカードをクリックしたとき
+            var fldSlt = this.player.getSelecting(this.player.field);
             if(fldSlt != "no cards"){//既にフィールドのカードを選択していた場合
-                this.player.fieldRoom.deselect();
+                this.player.leftenCards(this.player.field);
             }
             if(this.isSelected==0){
                 this.y-=10;
@@ -26,7 +43,7 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
                 this.isSelected = 0;
             }
 
-            console.log("select:" + this.player.handRoom.getSelecting());
+            console.log("select:" + this.player.getSelecting(this.player.hand));
 
         }
     },
@@ -42,18 +59,21 @@ var CardSprite = enchant.Class.create(enchant.Sprite, {
         var markName = getMarkName(this.getMark);
         return(markName);
     },
-    reverse:function(){//表裏を反転する
+    reverse:function(effect){//表裏を反転する
         if(this.isUra==0){//もともと表だった場合
             var new_frame = 54;
             this.isUra = 1;
         }else{
-            var new_frame = getCardFrame(num);
+            var new_frame = getCardFrame(this.numberCode);
             this.isUra = 0;
         }
+        if(effect==1){
         this.tl.scaleTo(0, 1, REVERSE_SPEED, enchant.Easing.QUAD_EASEIN)
             .then(function(){this.frame = new_frame;})
             .scaleTo(1, 1, REVERSE_SPEED, enchant.Easing.QUAD_EASEOUT);
-            console.log(new_frame);
+        }else{
+            this.frame = new_frame;
+        }
         return this.frame;
     }
 });

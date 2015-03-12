@@ -20,7 +20,7 @@ function testAA(){
             var sp = new CardSprite(n,player2.field.length,player2);
             var cre = [];
             cre[0] = sp;
-            player2.fieldRoom.addGroup(cre);
+            player2.addFieldCreature(cre);
             player2.field[0].tap();
             break;
         case 89://y
@@ -37,7 +37,6 @@ function testAA(){
         case 69://e
             console.log("errorCheck");
             var arr = card_array_sort(player1.hand);
-            console.log("aa");
             for(var i=0;i<arr.length;i++){
                 console.log(arr[i].getNumber());
             }
@@ -75,8 +74,35 @@ function testAA(){
                 handToYamahudaCard(player1.hand[0]);
             }
             for(var i=0;i<new_hand.length;i++){
-                var card = player1.handRoom.addCard(new_hand[i]);
-                player1.hand.push(card);
+                var cardNum =new_hand[i];
+                var posi2 =  player1.hand.length;
+            	var card = new CardSprite(cardNum,posi2,player1);
+            	var bef_rm = yamahudaRoom;
+            	var aft_rm = player1.handRoom;
+            	card.moveTo(bef_rm.x + 10,bef_rm.y + 10);
+            	card.tl.moveTo(posi2*(CARD_WID + 5) + 5 + aft_rm.x,ROOM_HGT_1 - CARD_HGT + aft_rm.y, CARD_SPEED, enchant.Easing.QUAD_EASEOUT);
+            	scene.addChild(card);
+            	player1.hand[posi2] = card;
+            }
+            break;
+        case 81://q
+            console.log("enemyHandChange");
+            //var new_hand = [1,15,29,43,5];
+            var new_hand = [1,2,14,27,40,6];
+            var ln = player2.hand.length;
+            for(var i=0;i<ln;i++){
+                handToYamahudaCard(player2.hand[0]);
+            }
+            for(var i=0;i<new_hand.length;i++){
+                var cardNum =new_hand[i];
+                var posi2 =  player2.hand.length;
+            	var card = new CardSprite(cardNum,posi2,player2);
+            	var bef_rm = yamahudaRoom;
+            	var aft_rm = player2.handRoom;
+                card.moveTo(bef_rm.x + 10,bef_rm.y + 10);
+            	card.tl.moveTo(posi2*(CARD_WID + 5) + 5 + aft_rm.x,ROOM_HGT_1 - CARD_HGT + aft_rm.y, CARD_SPEED, enchant.Easing.QUAD_EASEOUT);
+        	    scene.addChild(card);
+            	player2.hand[posi2] = card;
             }
             break;
         case 78://n

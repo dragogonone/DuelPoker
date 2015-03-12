@@ -9,16 +9,6 @@ var YamahudaRoomGroup = enchant.Class.create(enchant.Group, {
         this.room = "yamahuda";
     },
     ontouchend:function(){
-        var aP = activePlayer;
-        var fldSlt = aP.fieldRoom.getSelecting();
-        if(fldSlt != "no cards"){
-            var num = aP.fieldRoom.getSelecting();
-            var atCrt = aP.field[num[0]];
-            battle = new Battle(atCrt,this);
-        }else{
-            console.log("残り山札:" + yamahuda.length + "枚");
-            console.log(yamahuda);
-        }
     },
     deleteImg: function(){
         this.removeChild(this.childNodes[1]);

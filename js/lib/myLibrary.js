@@ -82,3 +82,70 @@ function getBigger(n1,n2){
 		return 0;
 	}
 }
+
+//階乗
+function factorial(num) {
+    return (num <= 0) ? 1 : (num * factorial(num-1));
+};
+
+
+//自然数冪集合配列
+function bekisyugou_array(num){
+	var ret = [[]];
+	var ret_i = 0;
+	for(var naka_ln=1;naka_ln<num;naka_ln++){
+		var now_arr = [];
+		now_arr = reset_arr(now_arr,naka_ln);
+		while(true){
+			ret[ret_i] = now_arr.concat();
+			now_arr = zurasu_arr(now_arr,num - 1);
+			ret_i++;
+			if(now_arr=="owari"){break;}
+		}
+
+	}
+	return ret;
+
+	function zurasu_arr(arr,num){
+		var ln = arr.length;
+		var x = num;
+		var naka_ln = 0;
+
+		if(arr[ln-1] < num){
+			arr[ln-1]++;
+			return arr;
+		}
+
+		var j = 1;
+		while(ln-1-j>=0){
+			if(arr[ln-1-j] < num-j){
+				var k = arr[ln-1-j] + 1;
+				for(var l=(ln-1-j);l<ln;l++){
+					arr[l] = k;
+					k++;
+				}
+				return arr;
+			}
+			j++;
+		}
+		return "owari";
+	}
+
+	function reset_arr(arr,num){
+		for(var j=0;j<num;j++){
+			arr[j] = j;
+		}
+		return arr;
+	}
+}
+
+//配列最大値のキー
+function getMaxOfArrayKey(numArray) {
+	var max = 0;
+  	for(var i=0;i<numArray.length;i++){
+		if(max<numArray[i]){
+			max = i;
+		}
+	}
+	return max;
+}

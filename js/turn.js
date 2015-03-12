@@ -2,9 +2,18 @@
 
 function turnStart(player){//ターンの始まるプレイヤーが引数
     console.log(player.player + "P Turn Start");
-    player.drawCard();
+
+    for(var i=0;i<player.backNum + 1;i++){
+        scene.tl.delay(10)
+            .then(function(){player.drawCard()});
+    }
+
+    player.backNum = 0;
     phase = 1;
     player.isSummoned = 0;
+    for(var i=0;i<player.field.length;i++){
+        player.field[i].untap();
+    }
 
     if(player.isMan==0){
         console.log("CPU turn");
@@ -21,8 +30,8 @@ function turnEnd(player){//ターンの終わるプレイヤーが引数
     }
 
     //カード戻すモード 一回操作権を得る
-    player.handRoom.deselect();
-    player.fieldRoom.deselect();
+    player.leftenCards(player.hand);
+    player.leftenCards(player.field);
     console.log("戻すカードを選んで下さい");
     phase = 2;
 }
@@ -37,12 +46,4 @@ function afterCardBack(){
     }
     console.log(activePlayer);
     turnStart(activePlayer);
-}
-
-//CPUがどういう行動を取るのかを記述
-function CPUturnStart(){
-    turnEnd(activePlayer);
-    //召喚
-    //攻撃
-    afterCardBack();
 }

@@ -14,56 +14,48 @@ var HandRoomGroup = enchant.Class.create(enchant.Group, {
             this.y = 0;
             this.name = "eneHandRoom";
         }
-    },
-    addCard: function(card){//手札にカードを一枚追加 //引数は数字コード
-        var x =  this.player.hand.length;
-        var sp = new CardSprite(card,x,this.player);
-        sp.moveTo(yamahudaRoom.x - this.x,yamahudaRoom.y - this.y);
-        var frame_temp = this.frame;
-        //this.frame = 54;
-        sp.tl.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT, CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
-             //.scaleTo(0, 1, 5, enchant.Easing.QUAD_EASEIN)
-             //.then(function(){this.frame = frame_temp})
-             //.scaleTo(1, 1, 5, enchant.Easing.QUAD_EASEOUT);
-        this.addChild(sp);
-        if(this.player.player==2){//相手のカードは裏返して追加
-            sp.frame = 54;
-            sp.isUra = 1;
-        }
-        return sp;
-    },
-    leftenCards: function(){//カードを左下に寄せる
-        this.player.hand = deleteArrZero(this.player.hand);
-        for(var i=0;i<this.player.hand.length;i++){
-            this.player.hand[i].posi2 = i;
-            this.player.hand[i].moveTo(i*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
-            this.player.hand[i].isSelected = 0;
-        }
-    },
-    deselect: function(){//カードの選択を解除
-        for(var i=0;i<this.player.hand.length;i++){
-            this.player.hand[i].moveTo(i*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
-            this.player.hand[i].isSelected = 0;
-        }
-        selecting_posi = 0;
-    },
-    getSelecting: function(){//選択中のカードの配列を返す
-        var arr = [];
-        var count = 0;
-        for(var i=0;i<this.player.hand.length;i++){
-            if(this.player.hand[i].isSelected==1){
-                arr.push(i)
-                count++;
-            }
-        }
-        if(count==0){
-            return "no cards";
-        }
-        return arr;
-    },
-    overCheck: function(){//7枚だったらどれか一枚を捨てる
-
-    }
+    }//,
+    // addCard: function(card){//手札にカードを一枚追加 //引数は数字コード
+    //     var x =  this.player.hand.length;
+    //     var sp = new CardSprite(card,x,this.player);
+    //     sp.moveTo(yamahudaRoom.x - this.x,yamahudaRoom.y - this.y);
+    //     sp.tl.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT, CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+    //     this.addChild(sp);
+    //     if(this.player.player==2){//相手のカードは裏返して追加
+    //         sp.frame = 54;
+    //         sp.isUra = 1;
+    //     }
+    //     return sp;
+    // },
+    // leftenCards: function(){//カードを左下に寄せる
+    //     this.player.hand = deleteArrZero(this.player.hand);
+    //     for(var i=0;i<this.player.hand.length;i++){
+    //         this.player.hand[i].posi2 = i;
+    //         this.player.hand[i].moveTo(i*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
+    //         this.player.hand[i].isSelected = 0;
+    //     }
+    // },
+    // deselect: function(){//カードの選択を解除
+    //     for(var i=0;i<this.player.hand.length;i++){
+    //         this.player.hand[i].moveTo(i*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT);
+    //         this.player.hand[i].isSelected = 0;
+    //     }
+    //     selecting_posi = 0;
+    // },
+    // getSelecting: function(){//選択中のカードの配列を返す
+    //     var arr = [];
+    //     var count = 0;
+    //     for(var i=0;i<this.player.hand.length;i++){
+    //         if(this.player.hand[i].isSelected==1){
+    //             arr.push(i)
+    //             count++;
+    //         }
+    //     }
+    //     if(count==0){
+    //         return "no cards";
+    //     }
+    //     return arr;
+    // }
 });
 
 var HandRoomColor = enchant.Class.create(enchant.Label, {

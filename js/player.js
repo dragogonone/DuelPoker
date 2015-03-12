@@ -11,6 +11,7 @@ function Player(_player,isMan) {
 	this.isMan = isMan;			//人間か
 	this.enemyPlayer = 0;	//相手のプレイヤーを入れておく
 	this.isSummoned = 0;	//このターン召喚したか
+	this.backNum = 0;		//ターンの終わりに戻したカードの枚数
 
 	this.handRoom = undefined; //roomをプレイヤーの所有物とする
 	this.fieldRoom = undefined;
@@ -24,22 +25,22 @@ Player.prototype.initCards = function(){
 	this.field = [];
 	this.trush = [];
 	this.trap = [];
+
+	var p = this;
 	for(var i=0;i<5;i++){//5枚ドロー
-		var cardNum = popYamahuda();
-		var card = this.handRoom.addCard(cardNum);
-		this.hand[i] = card;
+		scene.tl.delay(5).then(function(){
+			YamahudaToHandCard(p);
+		});
 	}
 }
 
 //カードドロー
 Player.prototype.drawCard = function() {
-	var x = popYamahuda();
-	var card = this.handRoom.addCard(x);
-	this.hand.push(card);
+	YamahudaToHandCard(this);
 }
 
 //フィールドにカードを召喚
-Player.prototype.summon = function(cards) {
+Player.prototype.summonTry = function(cards) {
 
 	if(cards == "no cards"){
 		console.log("召喚:カードが選択されていません");
@@ -48,10 +49,8 @@ Player.prototype.summon = function(cards) {
 
 	var creature = [];
 	var unsortedCreature = [];
-	var ln = cards.length;
 
-
-	for(var i=0;i<ln;i++){
+	for(var i=0;i<cards.length;i++){
 		unsortedCreature[i] = this.hand[cards[i]];
 	}
 
@@ -62,20 +61,24 @@ Player.prototype.summon = function(cards) {
 	console.log("役:" + getYakuName(yaku[0]));
 
 	//召喚判定
-	if(canSummon(creature)==0){
-		console.log(canSummon(creature));
+	if(canSummonByCreature(creature)==0){
 		console.log("クリーチャーの召喚条件を満たしていません");
 		return;
 	}
 
+	this.summon(unsortedCreature,yaku);
+}
+Player.prototype.summon = function(unsortedCreature,yaku){
 
-	//召喚成功
+	creature = card_array_sort(unsortedCreature);
+	//役判定
+
 
 	//使用したカードを手札から削除
-	for(var i=0;i<ln;i++){
-		this.handRoom.deleteCard(unsortedCreature[i]);
+	for(var i=0;i<unsortedCreature.length;i++){
+		this.hand[unsortedCreature[i].posi2] = 0;
 	}
-	this.handRoom.leftenCards();//カードを詰める
+	this.leftenCards(this.hand);//カードを詰める
 
 	//役の効果召喚前発動
 	var creatures = [];
@@ -104,7 +107,9 @@ Player.prototype.summon = function(cards) {
 	}
 	var summonedCrts = [];
 	for(var i=0;i<creatures.length;i++){
-		summonedCrts[i] = this.fieldRoom.addGroup(creatures[i]);//フィールドにカードを追加する
+
+		summonedCrts[i] = this.addFieldCreature(creatures[i]);//フィールドにカードを追加する
+		console.log("a");
 		console.log(summonedCrts[i].creatureName + "を召喚");
 	}
 	//役の効果召還後発動
@@ -152,8 +157,110 @@ Player.prototype.summon = function(cards) {
 		this.isSummoned = 1;
 }
 
-//ターンの終わりに手札からカードを戻す
-Player.prototype.cardback = function() {
-	var cards = player1.handRoom.getSelecting();
-	console.log();
+Player.prototype.getSelecting = function(room){
+	var arr = [];
+	var count = 0;
+	for(var i=0;i<room.length;i++){
+		if(room[i].isSelected==1){
+			arr.push(i)
+			count++;
+		}
+	}
+	if(count==0){
+		return "no cards";
+	}
+	return arr;
+}
+
+Player.prototype.leftenCards = function(room){
+	room = deleteArrZero(room);
+	for(var i=0;i<room.length;i++){
+		room[i].posi2 = i;
+		if(room==this.hand){
+			room[i].moveTo(this.handRoom.x + i*(CARD_WID + 5) + 5,this.handRoom.y + ROOM_HGT_1 - CARD_HGT);
+		}else if(room==this.field){
+			room[i].moveTo(this.fieldRoom.x + i*(CARD_HGT + 5) + 5,this.fieldRoom.y + ROOM_HGT_1 - CARD_HGT);
+			if(room[i].isTapped==1){
+				room[i].moveTo(room[i].x + CARD_HGT,room[i].y + (CARD_HGT - CARD_WID));
+			}
+		}
+		room[i].isSelected = 0
+	}
+
+}
+
+
+Player.prototype.getUntap = function(){
+	var arr = [];
+	var count = 0;
+	for(var i=0;i<this.field.length;i++){
+		if(this.field[i].isTapped==0){
+			arr.push(i);
+			count++;
+		}
+	}
+	if(count==0){
+		return "no cards";
+	}
+	return arr;
+}
+
+Player.prototype.getTap = function(){
+	var arr = [];
+	var count = 0;
+	for(var i=0;i<this.field.length;i++){
+		if(this.field[i].isTapped==1){
+			arr.push(i);
+			count++;
+		}
+	}
+	if(count==0){
+		return "no cards";
+	}
+	return arr;
+}
+
+Player.prototype.overCheck = function(room){
+	if(this.room.length>7){
+		console.log("cardOver");
+	}
+}
+
+Player.prototype.addHand = function(room,numberCode){
+	var posi2 =  room.length;
+	var card = new CardSprite(numberCode,posi2,this.player);
+	card.moveTo(yamahudaRoom.x - this.x,yamahudaRoom.y - this.y);
+	card.tl.moveTo(x*(CARD_WID + 5) + 5,ROOM_HGT_1 - CARD_HGT, CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+	this.addChild(card);
+	if(this.player.player==2){//相手のカードは裏返して追加
+		card.reverse(0);
+	}
+	return card;
+}
+
+//カードのスプライトを引数にとりそれらをアニメーションしつつフィールドに追加
+Player.prototype.addFieldCreature = function(cards){
+	var x = this.field.length;
+	var group = new CreatureGroup(x, cards,this);
+	var y = cards.length;
+	var bef_posi =  [];
+	for(var i=0;i<y;i++){
+		var card = cards
+		group.addChild(cards[i]);
+		bef_posi[i] = {};
+		bef_posi[i].x = cards[i].x;
+		bef_posi[i].y = cards[i].y;
+	}
+	group.moveTo(5 + x*(CARD_HGT + 5) + this.fieldRoom.x,this.fieldRoom.y + ROOM_HGT_1 - CARD_HGT)
+	for(var i=0;i<y;i++){
+		cards[i].tl.moveTo(bef_posi[i].x - group.x,bef_posi[i].y - group.y,0);
+	}
+
+	for(var i=0;i<y;i++){
+		cards[i].tl.moveTo(0, 0,SUMMON_SPEED)
+				.moveTo(0, 0 - ((y-i-1)*15),SUMMON_SPEED);
+	}
+		scene.addChild(group);
+		this.field.push(group);
+		return group;
 }

@@ -15,9 +15,9 @@ var okButtonLabel = enchant.Class.create(enchant.Label, {
     },
     ontouchend:function(){ // touchendイベントのイベントリスナー
         console.log("OK Button");
-        if(phase==2){
+        if(phase==2){//ターン終了時のカード交換
             var p = player1;
-            var cards = p.handRoom.getSelecting();
+            var cards = p.getSelecting(p.hand);
             console.log(cards);
 
             if(cards != "no cards"){
@@ -30,16 +30,18 @@ var okButtonLabel = enchant.Class.create(enchant.Label, {
                     //cardMove(backCards[i],p.handRoom,yamahudaRoom);
                     handToYamahudaCard(backCards[i]);
                 }
+                p.backNum = cards.length;
             }
             afterCardBack(p);
-        }else if(phase==3){
+        }else if(phase==3){//ブロッカー選択
             var p = player1;
-            var cards = p.fieldRoom.getSelecting();
+            var cards = p.getSelecting(p.field);
             if(cards != "no cards"){
                 var blocker = p.field[cards[0]];
             }else{
                 var blocker = null;
             }
+            console.log(blocker);
             battle.afterBlockerSelect(blocker);
         }
     }

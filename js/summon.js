@@ -1,32 +1,40 @@
-//召喚の関連する関数はこちら
+//召喚に関連する関数はこちら
 
-//カードスプライト配列を実際の数字でソートして返す
-function card_array_sort(data,order){
-	//デフォは昇順(ASC)
-	var num_a = 1;
-	var num_b = -1;
 
-	if(order === 'desc'){//指定があれば降順(DESC)
-		num_a = -1;
-		num_b = 1;
+//召喚できるか判定　引数数字コードver CPUが使用
+function canSummon(cards){
+	var yaku = judgePoker(cards);
+	var mark = 1;
+	var number = 1;
+	for(var i=0;i<cards.length;i++){
+		//マーク
+		if( codeToMark(cards[0]) != codeToMark(cards[i]) ){
+			mark = 0//一つでもマークが違ったらダメ
+		}
+		//同じ数字
+		if( codeToNum(cards[0]) != codeToNum(cards[i])){
+			number = 0//一つでも数字が違ったらダメ
+		}
 	}
 
-	data = data.sort(function(a, b){
-		var x = a.getNumber();
-		var y = b.getNumber();
-		if (x > y) return num_a;
-		if (x < y) return num_b;
+	//判定
+	if(yaku==0 && mark==0 && number==0){
 		return 0;
-	});
-	return data;
+	}else{
+		return 1;
+	}
 }
 
 
-//召喚できるか判定
-function canSummon(creature){
+//召喚できるか判定 引数にスプライト配列 人間が使用
+function canSummonByCreature(creature){
 	var player = creature[0].player;
 	if(player.isSummoned==1){
 		console.log("このターンは既に召喚しています");
+		return 0;
+	}
+	if(player.field.length>=5){
+		console.log("フィールドがいっぱいです");
 		return 0;
 	}
 

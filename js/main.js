@@ -2,6 +2,7 @@ enchant();  // 初期化
 
 var FPS = 30;    				// フレームレート
 var CARD_SPEED = 20;            //カードの移動フレーム
+var SUMMON_SPEED = 10;          //召喚するときのフレーム
 var REVERSE_SPEED = 4;          //カードが裏返るときのスピード
 var SCENE_WID = 960;			//画面横幅
 var SCENE_HGT = 640;			//画面縦幅
@@ -28,6 +29,7 @@ var yakuGlobal = 0;         //役を保存しておくグローバル変数 美�
 var activePlayer = 0;       //どっちのターンか
 var nonActivePlayer = 0;    //↑ではない方のプレイヤー
 var battle = undefined;             //バトルのインスタンス
+var animating = 0;          //アニメーション中　これが1の時は待つという処理を挟んだりする
 
 window.onload = function () {
     game = new Game(SCENE_WID, SCENE_HGT); // Gameオブジェクトの作成
@@ -41,7 +43,7 @@ window.onload = function () {
         initGame();
     };
     game.start();
-
+    window.scrollTo(0, 0);
 };
 
 function initGame(){

@@ -11,7 +11,7 @@ var Battle = enchant.Class.create({
         this.atCrt = _atCrt;
         this.dfCrt = _dfCrt;
         this.blCrt = null;
-        this.aP = _atCrt.parentNode.player;
+        this.aP = _atCrt.player;
         if(this.aP == player1){
             this.nP = player2;
         }else{
@@ -20,9 +20,12 @@ var Battle = enchant.Class.create({
 
         console.log(this.atCrt.creatureName + " tried to attack to " + this.cratureName);
 
+        console.log(this.atCrt.x);
+		console.log(this.atCrt.cards[0].x);
+
         //ここにブロックの処理を書く
         if(this.nP.isMan==1){
-            var blockable = this.nP.fieldRoom.getUntap();
+            var blockable = this.nP.getUntap();
             if(blockable!="no cards"){
                 phase = 3;
                 console.log("ブロックするクリーチャーを選択")
@@ -38,12 +41,9 @@ var Battle = enchant.Class.create({
     afterBlockerSelect: function(_blCrt){//ブロッカーを選択した後のバトルの処理
 
         this.blCrt = _blCrt;
-        if(this.blCrt!=null){
+        if(this.blCrt!=null){//ブロックされた
             this.blockAttack();
-        }
-
-        //ブロックされなかった
-        if(this.dfCrt==yamahudaRoom){
+        }else if(this.dfCrt==yamahudaRoom){
             this.attackToYamahuda();
         }else{
             this.attackToCreature();
@@ -52,13 +52,11 @@ var Battle = enchant.Class.create({
         this.attackEnd(this.atCrt,this.aP);
     },
     attackEnd: function(){
-        if(this.atCrt.parentNode==this.aP.fieldRoom){
+        player1.leftenCards(player1.field);
+        player2.leftenCards(player2.field);
+        if(this.atCrt==this.aP.field[this.atCrt.posi2]){
             this.atCrt.tap();
         }
-        player1.fieldRoom.deselect();
-        player2.fieldRoom.deselect();
-        player1.fieldRoom.leftenCards();
-        player2.fieldRoom.leftenCards();
         phase = 1;
     },
     attackToYamahuda: function(){

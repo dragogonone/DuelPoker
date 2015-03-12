@@ -5,21 +5,55 @@
 //引数に死ぬクリーチャーのインスタンス
 function fieldToTrushCard(creature){
 	var p = creature.player;
-	p.fieldRoom.deleteGroup(creature);
-	for(i=0;i<creature.cards.length;i++){
-		p.trushRoom.addCard(creature.cards[i].numberCode);
+	//p.fieldRoom.deleteGroup(creature);
+	if(creature.isDivineShield==1){
+		console.log(creature.creatureName + "のバリアが解けた！");
+		creature.isDiveShield = 0;
+		return;
 	}
+
+	p.field[creature.posi2] = 0;
+	var aft_rm = p.trushRoom;
+	var bef_rm = p.fieldRoom;
+	for(var i=0;i<creature.cards.length;i++){
+		var card = creature.cards[i];
+			card.moveTo(creature.x + card.x,creature.y + card.y);
+			scene.addChild(card);
+			card.tl.delay(i*10)
+				.moveTo(aft_rm.x + 10,aft_rm.y + 10,CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+			p.trush.push(card);
+	}
+	scene.removeChild(creature);
+	p.leftenCards(p.field);
 }
 
 //心変わり
 function fieldToEnemyField(creature){
-	var p = creature.player;
-	p.fieldRoom.deleteGroup(creature);
-	var newCrt = [];
-	for(i=0;i<creature.cards.length;i++){
-		newCrt[i] = creature.cards[i];
+	var old_p = creature.player;
+	var new_p = old_p.enemyPlayer;
+	var aft_rm = new_p.fieldRoom;
+	var posi2 = new_p.field.length;
+
+	var new_x = 5 + posi2*(CARD_HGT + 5) + aft_rm.x;
+	var new_y = aft_rm.y + ROOM_HGT_1 - CARD_HGT
+	var new_r = creature.rotation
+	console.log(new_r);
+	if(creature.isTapped==1){
+		new_x = new_x + CARD_HGT;
+		new_y = new_y + (CARD_HGT - CARD_WID);
+		new_r = new_r;
 	}
-	p.enemyPlayer.fieldRoom.addGroup(newCrt);
+	creature.tl.tween({
+		x:new_x,
+		y:new_y,
+		rotation: new_r,
+		time: CARD_SPEED
+	});
+	creature.player = new_p;
+	new_p.field.push(creature);
+	old_p.field[creature.posi2] = 0;
+	old_p.leftenCards(old_p.field);
+	//new_p.leftenCards(new_p.field);
 }
 
 //山札のカードを墓地へ送る
@@ -30,16 +64,19 @@ function yamahudaToTrushCard(player,breakNum){
 			//cardMove(card,yamahudaRoom,player.trushRoom);
 			var bef_rm = yamahudaRoom
 			var aft_rm = player.trushRoom;
-	        var card = new CardSprite(1,3,player);
-	        card.moveTo(10,10);
-	        bef_rm.addChild(card);
-			console.log(card);
-			 card.tl.moveTo(aft_rm.x - bef_rm.x + 10,aft_rm.y - bef_rm.y + 10,CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
-			 	.scaleTo(0, 1, REVERSE_SPEED, enchant.Easing.QUAD_EASEIN)
-			  	.then(function(){this.frame = card.reverse()})
-			  	.scaleTo(1, 1, REVERSE_SPEED, enchant.Easing.QUAD_EASEOUT);
-			 var x = popYamahuda();
-			 player.trushRoom.addCard(x);
+			var num = popYamahuda();
+	        var card = new CardSprite(num,player.trush.length,player);
+	        card.moveTo(bef_rm.x + 10,bef_rm.y + 10);
+			card.frame = 54;
+            card.isUra = 1;
+			scene.addChild(card);
+			card.tl.delay(i*10)
+				.moveTo(aft_rm.x + 10,aft_rm.y + 10,CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+				.scaleTo(0, 1, REVERSE_SPEED * 2, enchant.Easing.QUAD_EASEIN)
+				.then(function(){this.reverse(0)})
+				.scaleTo(1, 1, REVERSE_SPEED * 2, enchant.Easing.QUAD_EASEIN)
+			  	;
+	        player.trush.push(card);
 		}else{//OverDamage
 			console.log("OverDamage");
 			player.overCard++;
@@ -48,7 +85,57 @@ function yamahudaToTrushCard(player,breakNum){
 }
 
 
-//roomからroomに送る
+//手札のカードを山札に送る
+//引数はカードのスプライト
+function handToYamahudaCard(card){
+	//cardMove(card,card.player.handRoom,yamahudaRoom);
+	var p = card.player;
+	var rm = p.handRoom;
+	card.tl.moveTo(yamahudaRoom.x + 10,yamahudaRoom.y + 10,CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+		.scaleTo(0, 1, REVERSE_SPEED * 2, enchant.Easing.QUAD_EASEIN)
+	 	.then(function(){
+			this.reverse(0);
+		})
+		.removeFromScene(this);
+	p.hand[card.posi2] = 0;
+	p.leftenCards(p.hand);
+	addYamahuda(card.numberCode);
+}
+
+function YamahudaToHandCard(player){
+	var cardNum = popYamahuda();
+	var posi2 =  player.hand.length;
+	var card = new CardSprite(cardNum,posi2,player);
+	var bef_rm = yamahudaRoom;
+	var aft_rm = player.handRoom;
+	card.moveTo(bef_rm.x + 10,bef_rm.y + 10);
+
+	if(player.hand.length>=7){
+		console.log("Over Cards");
+		aft_rm = player.trushRoom;
+		animating = 1;
+		card.tl.moveTo(aft_rm.x + 10,aft_rm.y + 10, CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+				.then(function(){animating = 0;});
+				scene.addChild(card);
+		player.trush.push(card);
+	}
+
+	animating = 1;
+	card.tl.moveTo(posi2*(CARD_WID + 5) + 5 + aft_rm.x,ROOM_HGT_1 - CARD_HGT + aft_rm.y, CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
+			.then(function(){animating = 0;});
+	scene.addChild(card);
+	if(player.player==2){//相手のカードは裏返して追加
+		//card.reverse(0);
+	}
+	player.hand[posi2] = card;
+}
+
+function handToFieldCard(card){
+
+}
+
+
+//roomからroomに送るアニメーション
 // function cardMove(card,bef_rm,aft_rm){
 // 	var p = bef_rm.player;
 // 	switch(bef_rm.room){
@@ -94,21 +181,3 @@ function yamahudaToTrushCard(player,breakNum){
 // 			break;
 // 	}
 // }
-
-
-//手札のカードを山札に送る
-//引数はカードのスプライト
-function handToYamahudaCard(card){
-	//cardMove(card,card.player.handRoom,yamahudaRoom);
-	var p = card.player;
-	var rm = p.handRoom;
-	card.tl.moveTo(yamahudaRoom.x - rm.x + 10,yamahudaRoom.y - rm.y + 10,CARD_SPEED, enchant.Easing.QUAD_EASEOUT)
-	 	.then(function(){card.reverse()});
-	p.hand[card.posi2] = 0;
-	p.handRoom.leftenCards();
-	addYamahuda(card.numberCode);
-}
-
-function handToFieldCard(card){
-
-}
